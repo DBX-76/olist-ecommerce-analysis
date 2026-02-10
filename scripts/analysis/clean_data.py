@@ -303,8 +303,11 @@ print("\nCleaning Summary:")
 print(summary_df.to_string(index=False))
 
 # Save summary
-summary_df.to_csv(os.path.join(REPORTS_PATH, 'cleaning_summary.csv'), index=False)
-print(f"\n[OK] Cleaning summary saved: {os.path.join(REPORTS_PATH, 'cleaning_summary.csv')}")
+# Ensure cleaning report directory exists and write summary there
+cleaning_report_dir = os.path.join(REPORTS_PATH, 'cleaning')
+os.makedirs(cleaning_report_dir, exist_ok=True)
+summary_df.to_csv(os.path.join(cleaning_report_dir, 'cleaning_summary.csv'), index=False)
+print(f"\n[OK] Cleaning summary saved: {os.path.join(cleaning_report_dir, 'cleaning_summary.csv')}")
 
 # Final summary
 print("\n" + "="*80)

@@ -193,7 +193,9 @@ def create_zip_code_reference():
     print(zip_code_ref['data_quality'].value_counts())
     
     # Sauvegarder un rapport
-    report_path = os.path.join(REPORTS_PATH, 'zip_code_reference_report.csv')
+    zip_report_dir = os.path.join(REPORTS_PATH, 'zip_code_reference')
+    os.makedirs(zip_report_dir, exist_ok=True)
+    report_path = os.path.join(zip_report_dir, 'zip_code_reference_report.csv')
     report_data = {
         'metric': [
             'total_zip_prefixes',

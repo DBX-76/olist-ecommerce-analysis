@@ -11,7 +11,7 @@ PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
 REPORTS_PATH = os.path.join(PROJECT_ROOT, 'reports')
 
 # Create subdirectories
-subdirs = ['eda', 'data_quality', 'cleaning']
+subdirs = ['eda', 'data_quality', 'cleaning', 'customers', 'sellers', 'zip_code_reference', 'anomaly_detection']
 for subdir in subdirs:
     os.makedirs(os.path.join(REPORTS_PATH, subdir), exist_ok=True)
 
@@ -37,7 +37,6 @@ data_quality_files = [
     'duplicates_report.csv',
     'outliers_report.csv',
     'data_quality_summary.csv',
-    'cleaning_recommendations.csv',
     'date_consistency_report.csv'
 ]
 for filename in data_quality_files:
@@ -49,7 +48,33 @@ for filename in data_quality_files:
 
 # Move cleaning reports
 print("\nMoving cleaning reports...")
-cleaning_files = ['cleaning_summary.csv']
+cleaning_files = ['cleaning_summary.csv', 'cleaning_recommendations.csv']
+
+# Move customer reports
+print("\nMoving customer reports...")
+for filename in os.listdir(REPORTS_PATH):
+    if filename.startswith('customers_') and filename.endswith('.csv'):
+        src = os.path.join(REPORTS_PATH, filename)
+        dst = os.path.join(REPORTS_PATH, 'customers', filename)
+        if os.path.exists(src):
+            shutil.move(src, dst)
+            print(f"  Moved: {filename} -> customers/")
+
+# Move seller reports
+print("\nMoving seller reports...")
+for filename in os.listdir(REPORTS_PATH):
+    if filename.startswith('sellers_') and filename.endswith('.csv'):
+        src = os.path.join(REPORTS_PATH, filename)
+        dst = os.path.join(REPORTS_PATH, 'sellers', filename)
+        if os.path.exists(src):
+            shutil.move(src, dst)
+            print(f"  Moved: {filename} -> sellers/")
+
+# Move zip code reference report
+print("\nMoving zip code reference report...")
+if os.path.exists(os.path.join(REPORTS_PATH, 'zip_code_reference_report.csv')):
+    shutil.move(os.path.join(REPORTS_PATH, 'zip_code_reference_report.csv'), os.path.join(REPORTS_PATH, 'zip_code_reference', 'zip_code_reference_report.csv'))
+    print("  Moved: zip_code_reference_report.csv -> zip_code_reference/")
 for filename in cleaning_files:
     src = os.path.join(REPORTS_PATH, filename)
     dst = os.path.join(REPORTS_PATH, 'cleaning', filename)

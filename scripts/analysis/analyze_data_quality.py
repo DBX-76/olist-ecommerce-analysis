@@ -26,6 +26,11 @@ REPORTS_PATH = os.path.join(PROJECT_ROOT, 'reports')
 
 # Ensure reports directory exists
 os.makedirs(REPORTS_PATH, exist_ok=True)
+# Create categorized report directories
+DATA_QUALITY_DIR = os.path.join(REPORTS_PATH, 'data_quality')
+CLEANING_DIR = os.path.join(REPORTS_PATH, 'cleaning')
+os.makedirs(DATA_QUALITY_DIR, exist_ok=True)
+os.makedirs(CLEANING_DIR, exist_ok=True)
 
 # Define dataset files
 datasets = {
@@ -105,8 +110,8 @@ if missing_report:
     print(missing_df.head(20).to_string(index=False))
     
     # Save to CSV
-    missing_df.to_csv(os.path.join(REPORTS_PATH, 'missing_values_report.csv'), index=False)
-    print(f"\n[OK] Missing values report saved: {os.path.join(REPORTS_PATH, 'missing_values_report.csv')}")
+    missing_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'missing_values_report.csv'), index=False)
+    print(f"\n[OK] Missing values report saved: {os.path.join(DATA_QUALITY_DIR, 'missing_values_report.csv')}")
 else:
     print("\nNo missing values found in any dataset!")
 
@@ -133,8 +138,8 @@ print(f"\nTotal columns analyzed: {len(dtype_df)}")
 print("\nData type distribution:")
 print(dtype_df['Data_Type'].value_counts().to_string())
 
-dtype_df.to_csv(os.path.join(REPORTS_PATH, 'data_types_report.csv'), index=False)
-print(f"\n[OK] Data types report saved: {os.path.join(REPORTS_PATH, 'data_types_report.csv')}")
+dtype_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'data_types_report.csv'), index=False)
+print(f"\n[OK] Data types report saved: {os.path.join(DATA_QUALITY_DIR, 'data_types_report.csv')}")
 
 # 3. Duplicate Analysis
 print("\n" + "="*80)
@@ -156,8 +161,8 @@ for name, df in data.items():
 
 if duplicate_report:
     dup_df = pd.DataFrame(duplicate_report)
-    dup_df.to_csv(os.path.join(REPORTS_PATH, 'duplicates_report.csv'), index=False)
-    print(f"\n[OK] Duplicates report saved: {os.path.join(REPORTS_PATH, 'duplicates_report.csv')}")
+    dup_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'duplicates_report.csv'), index=False)
+    print(f"\n[OK] Duplicates report saved: {os.path.join(DATA_QUALITY_DIR, 'duplicates_report.csv')}")
 else:
     print("\nNo duplicates found in any dataset!")
 
@@ -190,8 +195,8 @@ for name, df in data.items():
 
 if duplicate_columns_report:
     dup_cols_df = pd.DataFrame(duplicate_columns_report)
-    dup_cols_df.to_csv(os.path.join(REPORTS_PATH, 'duplicate_columns_report.csv'), index=False)
-    print(f"\n[OK] Duplicate columns report saved: {os.path.join(REPORTS_PATH, 'duplicate_columns_report.csv')}")
+    dup_cols_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'duplicate_columns_report.csv'), index=False)
+    print(f"\n[OK] Duplicate columns report saved: {os.path.join(DATA_QUALITY_DIR, 'duplicate_columns_report.csv')}")
 else:
     print("\nNo duplicate columns found in any dataset!")
 
@@ -330,8 +335,8 @@ if 'orders' in data:
 
 if date_consistency_report:
     date_df = pd.DataFrame(date_consistency_report)
-    date_df.to_csv(os.path.join(REPORTS_PATH, 'date_consistency_report.csv'), index=False)
-    print(f"\n[OK] Date consistency report saved: {os.path.join(REPORTS_PATH, 'date_consistency_report.csv')}")
+    date_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'date_consistency_report.csv'), index=False)
+    print(f"\n[OK] Date consistency report saved: {os.path.join(DATA_QUALITY_DIR, 'date_consistency_report.csv')}")
 else:
     print("\nNo date columns found for consistency check.")
 
@@ -376,8 +381,8 @@ if outlier_report:
     print("\nTop 10 columns with most outliers:")
     print(outlier_df.sort_values('Outlier_Count', ascending=False).head(10).to_string(index=False))
     
-    outlier_df.to_csv(os.path.join(REPORTS_PATH, 'outliers_report.csv'), index=False)
-    print(f"\n[OK] Outliers report saved: {os.path.join(REPORTS_PATH, 'outliers_report.csv')}")
+    outlier_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'outliers_report.csv'), index=False)
+    print(f"\n[OK] Outliers report saved: {os.path.join(DATA_QUALITY_DIR, 'outliers_report.csv')}")
 else:
     print("\nNo outliers detected in numerical columns.")
 
@@ -416,8 +421,8 @@ summary_df = summary_df.sort_values('Missing_Percentage', ascending=False)
 print("\nData Quality Dashboard:")
 print(summary_df.to_string(index=False))
 
-summary_df.to_csv(os.path.join(REPORTS_PATH, 'data_quality_summary.csv'), index=False)
-print(f"\n[OK] Data quality summary saved: {os.path.join(REPORTS_PATH, 'data_quality_summary.csv')}")
+summary_df.to_csv(os.path.join(DATA_QUALITY_DIR, 'data_quality_summary.csv'), index=False)
+print(f"\n[OK] Data quality summary saved: {os.path.join(DATA_QUALITY_DIR, 'data_quality_summary.csv')}")
 
 # 6. Cleaning Recommendations
 print("\n" + "="*80)
@@ -487,8 +492,8 @@ if recommendations:
     else:
         print("  None")
     
-    rec_df.to_csv(os.path.join(REPORTS_PATH, 'cleaning_recommendations.csv'), index=False)
-    print(f"\n[OK] Cleaning recommendations saved: {os.path.join(REPORTS_PATH, 'cleaning_recommendations.csv')}")
+    rec_df.to_csv(os.path.join(CLEANING_DIR, 'cleaning_recommendations.csv'), index=False)
+    print(f"\n[OK] Cleaning recommendations saved: {os.path.join(CLEANING_DIR, 'cleaning_recommendations.csv')}")
 else:
     print("\nNo data quality issues found. Data is clean!")
 
