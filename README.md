@@ -1,5 +1,7 @@
 # Brazilian E-Commerce Data Analysis Project
 
+[![Full Pipeline](https://github.com/OWNER/REPO/actions/workflows/pipeline.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/pipeline.yml)
+
 ## 📊 Project Overview
 
 This project contains the Brazilian E-Commerce Public Dataset by Olist, a comprehensive collection of data about orders, customers, products, and sellers from a Brazilian marketplace. The project includes advanced data quality analysis, anomaly detection, and geographic data standardization.
