@@ -52,7 +52,7 @@ Projet/
 ├── tmp/                        # Temporary files
 ├── requirements.txt            # Python dependencies
 ├── README.md                   # This file
-└── test_anomalies.py           # Test script
+└── test_pipeline.py           # Test script (renamed from test_anomalies.py)
 ```
 
 ## 🚀 Getting Started

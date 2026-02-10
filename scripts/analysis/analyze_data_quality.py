@@ -6,6 +6,7 @@ This script analyzes data quality issues and generates comprehensive reports.
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
 import warnings
 from datetime import datetime
 
@@ -18,7 +19,8 @@ pd.set_option('display.width', None)
 
 # Define paths (using absolute paths from project root)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+# Project root should be two levels above this script (repo root)
+PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 RAW_DATA_PATH = os.path.join(PROJECT_ROOT, 'data', 'raw')
 REPORTS_PATH = os.path.join(PROJECT_ROOT, 'reports')
 
