@@ -1,0 +1,38 @@
+# Data Configuration File
+# Brazilian E-Commerce Data Analysis Project
+
+# Data paths
+data:
+  raw: "data/raw"
+  processed: "data/processed"
+  external: "data/external"
+
+# Dataset files
+datasets:
+  orders: "olist_orders_dataset.csv"
+  customers: "olist_customers_dataset.csv"
+  order_items: "olist_order_items_dataset.csv"
+  order_payments: "olist_order_payments_dataset.csv"
+  order_reviews: "olist_order_reviews_dataset.csv"
+  products: "olist_products_dataset.csv"
+  sellers: "olist_sellers_dataset.csv"
+  geolocation: "olist_geolocation_dataset.csv"
+  category_translation: "product_category_name_translation.csv"
+
+# Data processing settings
+processing:
+  encoding: "utf-8"
+  delimiter: ","
+  date_format: "%Y-%m-%d %H:%M:%S"
+  
+# Output settings
+output:
+  reports: "reports"
+  figures: "reports/figures"
+  tables: "reports/tables"
+
+# Analysis settings
+analysis:
+  random_seed: 42
+  test_size: 0.2
+  confidence_level: 0.95
