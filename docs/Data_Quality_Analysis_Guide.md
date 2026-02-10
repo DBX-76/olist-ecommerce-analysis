@@ -2,7 +2,8 @@
 
 ## Vue d'ensemble
 
-Ce guide explique comment identifier et résoudre les problèmes de qualité des données dans votre dataset e-commerce brésilien. Le projet inclut maintenant une analyse complète avec standardisation géographique, détection d'anomalies financières et analyse approfondie des produits et avis.
+Ce guide explique comment identifier et résoudre les problèmes de qualité des données dans votre dataset e-commerce brésilien.
+Le projet inclut maintenant une analyse complète avec standardisation géographique, détection d'anomalies financières et analyse approfondie des produits et avis.
 
 ## Rapports Générés
 
