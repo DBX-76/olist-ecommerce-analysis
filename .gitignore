@@ -35,14 +35,28 @@ ENV/
 *.swo
 *~
 
-# Data files (except .gitkeep files)
-data/processed/*
-!data/processed/.gitkeep
-data/external/*
+# Data files (TOUTES les données brutes sont exclues)
+data/raw/**
+!data/raw/.gitkeep
+
+# External data
+data/external/**
 !data/external/.gitkeep
 
+# Specific file types to exclude
+*.csv
+*.xlsx
+*.xls
+*.json
+*.parquet
+*.dta
+*.sav
+*.sas7bdat
+*.h5
+*.hdf5
+
 # Reports (except .gitkeep files)
-reports/*
+reports/**
 !reports/.gitkeep
 
 # OS

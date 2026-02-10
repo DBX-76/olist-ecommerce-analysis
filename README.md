@@ -9,15 +9,17 @@ This project contains the Brazilian E-Commerce Public Dataset by Olist, a compre
 ```
 Projet/
 ├── data/
-│   ├── raw/                    # Original CSV files (9 datasets)
+│   ├── raw/                    # Original CSV files (NOT INCLUDED in Git - see data/README.md)
 │   ├── processed/              # Cleaned and processed data
 │   │   ├── zip_code_reference.csv      # Geographic reference table
 │   │   ├── customers_standardized.csv  # Standardized customer data
 │   │   ├── customers_with_geolocation.csv  # Enriched customer data
 │   │   ├── sellers_standardized.csv    # Standardized seller data
 │   │   ├── sellers_with_geolocation.csv    # Enriched seller data
-│   │   └── *_clean.csv                 # Other cleaned datasets
-│   └── external/               # External reference data
+│   │   ├── financial_analysis/         # Financial analysis results
+│   │   ├── advanced_cleaning/          # Advanced cleaning results
+│   │   └── product_review_analysis/    # Product and review analysis
+│   └── external/               # External reference data (NOT INCLUDED in Git)
 ├── notebooks/                  # Jupyter notebooks for analysis
 │   ├── 01_Exploratory_Data_Analysis.ipynb
 │   └── 02_Data_Quality_Analysis.ipynb
@@ -223,8 +225,36 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 ### Generated Reports
 - **Anomaly Detection Reports**: Detailed analysis of location inconsistencies
 - **Financial Anomaly Reports**: Analysis of payment/order discrepancies
+- **Product and Review Analysis Reports**: Quality analysis of products and customer reviews
 - **Standardization Reports**: Metrics on data improvement
 - **Quality Assessment Reports**: Comprehensive data quality overview
+
+## ⚠️ Important Note About Data Files
+
+**Raw data files are not included in this repository** due to size limitations and Git best practices. 
+To run the analysis scripts, you need to:
+
+1. Download the Brazilian E-commerce dataset from the official source
+2. Place the CSV files in the `data/raw/` directory
+3. Follow the file naming convention described in the documentation
+
+See `data/README.md` for detailed instructions on obtaining the raw data.
+
+## 🤝 Contributing
+
+The project follows this workflow:
+
+1. **Data Preparation**: Use scripts in `scripts/core/` to create reference tables
+2. **Standardization**: Apply standardization scripts to clean location data
+3. **Enrichment**: Add geographic information using reference tables
+4. **Analysis**: Perform analysis using notebooks in `notebooks/`
+5. **Reporting**: Generate reports in `reports/`
+
+For data files, contributors should:
+- Only commit processed data that is reasonably sized (<100MB)
+- Never commit raw data files to the repository
+- Use the provided scripts to reproduce the analysis pipeline
+- Document any new data processing steps in the appropriate README files
 
 ## 🔗 Key Relationships
 
