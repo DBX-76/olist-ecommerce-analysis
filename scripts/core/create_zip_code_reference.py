@@ -153,7 +153,8 @@ def create_zip_code_reference():
         grouped['coordinate_samples'] < 10
     ]
     choices = ['High', 'Medium', 'Low']
-    grouped['data_quality'] = np.select(conditions, choices)
+    # np.select requires the default to be compatible with choices dtype (strings)
+    grouped['data_quality'] = np.select(conditions, choices, default='Low')
     
     # Réorganiser les colonnes pour correspondre à la structure dbt
     final_columns = [
