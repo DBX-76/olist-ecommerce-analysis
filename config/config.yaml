@@ -1,1 +1,5 @@
-[12, 8]
+# Configuration pour les scripts de traitement de données
+paths:
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  reports: "reports"

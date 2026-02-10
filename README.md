@@ -2,64 +2,62 @@
 
 ## 📊 Project Overview
 
-This project contains the Brazilian E-Commerce Public Dataset by Olist, a comprehensive collection of data about orders, customers, products, and sellers from a Brazilian marketplace.
+This project contains the Brazilian E-Commerce Public Dataset by Olist, a comprehensive collection of data about orders, customers, products, and sellers from a Brazilian marketplace. The project includes advanced data quality analysis, anomaly detection, and geographic data standardization.
 
-## 📁 Project Structure
+## 📁 Updated Project Structure
 
 ```
 Projet/
 ├── data/
 │   ├── raw/                    # Original CSV files (9 datasets)
 │   ├── processed/              # Cleaned and processed data
+│   │   ├── zip_code_reference.csv      # Geographic reference table
+│   │   ├── customers_standardized.csv  # Standardized customer data
+│   │   ├── customers_with_geolocation.csv  # Enriched customer data
+│   │   ├── sellers_standardized.csv    # Standardized seller data
+│   │   ├── sellers_with_geolocation.csv    # Enriched seller data
+│   │   └── *_clean.csv                 # Other cleaned datasets
 │   └── external/               # External reference data
 ├── notebooks/                  # Jupyter notebooks for analysis
-├── scripts/                    # Python/R scripts for data processing
+│   ├── 01_Exploratory_Data_Analysis.ipynb
+│   └── 02_Data_Quality_Analysis.ipynb
+├── scripts/                    # Python scripts for data processing
+│   ├── core/                   # Core processing scripts
+│   │   ├── create_zip_code_reference.py    # Geographic reference creation
+│   │   ├── standardize_customers.py        # Customer standardization
+│   │   ├── enrich_customers_with_geolocation.py    # Customer enrichment
+│   │   ├── detect_seller_anomalies.py      # Seller anomaly detection
+│   │   ├── standardize_sellers.py          # Seller standardization
+│   │   └── enrich_sellers_with_geolocation.py      # Seller enrichment
+│   ├── analysis/               # Analysis scripts
+│   │   ├── analyze_data_quality.py         # Data quality analysis
+│   │   └── clean_data.py                 # Data cleaning
+│   └── utils/                  # Utility scripts
+│       ├── organize_reports.py
+│       └── test_profiling.py
 ├── reports/                    # Generated reports and visualizations
+│   ├── eda/                    # EDA reports (HTML)
+│   ├── data_quality/           # Data quality reports (CSV)
+│   ├── cleaning/               # Data cleaning reports (CSV)
+│   └── anomaly_detection/      # Anomaly detection reports (CSV)
 ├── docs/                       # Additional documentation
+│   └── Data_Quality_Analysis_Guide.md
 ├── config/                     # Configuration files
-└── README.md                   # This file
+│   ├── config.yaml             # Main configuration
+│   ├── data_config.yaml        # Data configuration
+│   ├── project_config.yaml     # Project settings
+│   └── settings.yaml           # Additional settings
+├── tmp/                        # Temporary files
+├── requirements.txt            # Python dependencies
+├── README.md                   # This file
+└── test_anomalies.py           # Test script
 ```
-
-## 📋 Dataset Description
-
-The dataset contains 9 CSV files with information about 100k orders from 2016 to 2018:
-
-### Core Datasets
-
-1. **olist_orders_dataset.csv** - Orders information
-   - Order status, timestamps, customer ID
-
-2. **olist_customers_dataset.csv** - Customer information
-   - Customer location, zip code prefix, city, state
-
-3. **olist_order_items_dataset.csv** - Order items
-   - Product ID, seller ID, price, freight value
-
-4. **olist_order_payments_dataset.csv** - Payment information
-   - Payment type, installments, payment value
-
-5. **olist_order_reviews_dataset.csv** - Customer reviews
-   - Review score, comment title, message
-
-### Supporting Datasets
-
-6. **olist_products_dataset.csv** - Product information
-   - Category, dimensions, weight, photos
-
-7. **olist_sellers_dataset.csv** - Seller information
-   - Seller location, zip code prefix, city, state
-
-8. **olist_geolocation_dataset.csv** - Geolocation data
-   - Zip code prefix, latitude, longitude, city, state
-
-9. **product_category_name_translation.csv** - Category translations
-   - Portuguese to English category name translations
 
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Python 3.7+ or R
-- Jupyter Notebook (optional)
+- Python 3.7+
+- Jupyter Notebook
 - Required libraries: pandas, numpy, matplotlib, seaborn, ydata-profiling
 
 ### Installation
@@ -69,67 +67,190 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 pip install -r requirements.txt
 ```
 
-### Quick Start with ydata_profiling
+### Quick Start
 
-1. **Test the profiling functionality**:
+1. **Create geographic reference table**:
 ```bash
-python scripts/test_profiling.py
+python scripts/core/create_zip_code_reference.py
 ```
 
-2. **Run the full EDA notebook**:
+2. **Standardize and enrich customer data**:
 ```bash
-jupyter notebook notebooks/01_Exploratory_Data_Analysis.ipynb
+python scripts/core/standardize_customers.py
+python scripts/core/enrich_customers_with_geolocation.py
 ```
 
-3. **View the generated reports**:
-   - Open HTML files in [`reports/`](reports/) directory
-   - Example: `reports/test_orders_profile.html`
+3. **Detect and handle seller anomalies**:
+```bash
+python scripts/core/detect_seller_anomalies.py
+python scripts/core/standardize_sellers.py
+python scripts/core/enrich_sellers_with_geolocation.py
+```
 
-### Data Loading Example (Python)
+4. **Run comprehensive data quality analysis**:
+```bash
+python scripts/analysis/analyze_data_quality.py
+```
 
+5. **Clean the data**:
+```bash
+python scripts/analysis/clean_data.py
+```
+
+6. **View the generated reports**:
+   - Open HTML files in [`reports/eda/`](reports/eda/) directory
+   - Check anomaly detection reports in [`reports/anomaly_detection/`](reports/anomaly_detection/)
+
+## 🎯 Enhanced Features
+
+### 1. Geographic Data Standardization
+- **Zip Code Reference Table**: Creates a canonical geographic reference with statistical measures
+- **City Name Standardization**: Resolves inconsistencies in city names across datasets
+- **Quality Metrics**: Assigns data quality scores based on sample sizes
+
+### 2. Anomaly Detection
+- **Customer Location Anomalies**: Identifies inconsistent location data
+- **Seller Location Anomalies**: Detects problematic seller location entries
+- **Automated Corrections**: Applies rules to fix common anomalies
+
+### 3. Data Enrichment
+- **Customer Geolocation**: Adds geographic coordinates to customer records
+- **Seller Geolocation**: Adds geographic coordinates to seller records
+- **Spread Metrics**: Calculates geographic spread for quality assessment
+
+## 📊 Analysis Pipeline
+
+### Step 1: Geographic Reference Creation
 ```python
-import pandas as pd
-
-# Load datasets
-orders = pd.read_csv('data/raw/olist_orders_dataset.csv')
-customers = pd.read_csv('data/raw/olist_customers_dataset.csv')
-order_items = pd.read_csv('data/raw/olist_order_items_dataset.csv')
-# ... load other datasets as needed
+# Creates zip_code_reference.csv with:
+# - Canonical city names (most frequent variant)
+# - Average coordinates
+# - Coordinate spread metrics
+# - Data quality indicators
 ```
 
-## 📊 Analysis Ideas
+### Step 2: Customer Processing
+```python
+# Standardizes customer city names using reference table
+# Enriches with geographic coordinates
+# Tracks standardization metrics
+```
 
-- Customer segmentation and behavior analysis
-- Sales trend analysis over time
-- Product category performance
-- Seller performance metrics
-- Geographic distribution analysis
-- Payment method preferences
-- Review sentiment analysis
-- Delivery time analysis
+### Step 3: Seller Processing
+```python
+# Detects anomalies in seller location data
+# Standardizes city names
+# Enriches with geographic coordinates
+```
 
-## 📝 Data Schema
+### Step 4: Quality Assessment
+```python
+# Generates comprehensive quality reports
+# Identifies remaining issues
+# Provides actionable recommendations
+```
 
-### Key Relationships
-- `orders.customer_id` → `customers.customer_id`
-- `order_items.order_id` → `orders.order_id`
-- `order_items.product_id` → `products.product_id`
-- `order_items.seller_id` → `sellers.seller_id`
-- `order_payments.order_id` → `orders.order_id`
-- `order_reviews.order_id` → `orders.order_id`
+## 📋 Dataset Description
 
-## 🔧 Next Steps
+The dataset contains 9 CSV files with information about 100k orders from 2016 to 2018:
 
-1. Explore the raw data in `data/raw/`
-2. Create data processing scripts in `scripts/`
-3. Develop analysis notebooks in `notebooks/`
-4. Generate reports in `reports/`
-5. Document findings in `docs/`
+### Core Datasets
+
+1. **olist_orders_dataset.csv** - Orders information
+2. **olist_customers_dataset.csv** - Customer information  
+3. **olist_order_items_dataset.csv** - Order items
+4. **olist_order_payments_dataset.csv** - Payment information
+5. **olist_order_reviews_dataset.csv** - Customer reviews
+
+### Supporting Datasets
+
+6. **olist_products_dataset.csv** - Product information
+7. **olist_sellers_dataset.csv** - Seller information
+8. **olist_geolocation_dataset.csv** - Geolocation data
+9. **product_category_name_translation.csv** - Category translations
+
+## 📊 Enhanced Features
+
+### 1. Geographic Data Standardization
+- **Zip Code Reference Table**: Creates a canonical geographic reference with statistical measures
+- **City Name Standardization**: Resolves inconsistencies in city names across datasets
+- **Quality Metrics**: Assigns data quality scores based on sample sizes
+
+### 2. Financial Anomaly Detection
+- **Payment/Order Reconciliation**: Identifies discrepancies between order totals and payment amounts
+- **Critical Anomaly Detection**: Flags orders marked as delivered without corresponding payments
+- **Financial Discrepancy Analysis**: Detailed analysis of monetary inconsistencies
+
+### 3. Advanced Data Cleaning
+- **Corruption Handling**: Removes corrupted records (e.g., shipped orders without items)
+- **Exception Documentation**: Documents legitimate exceptions (gift orders, marketing campaigns)
+- **Technical Corrections**: Fixes technical issues (installments, payment types)
+- **Tax Reconciliation Preparation**: Prepares data for fiscal reconciliation
+
+### 4. Product and Review Anomaly Analysis
+- **Product Dimension Analysis**: Detects missing dimensions and implausible densities
+- **Unit Conversion**: Corrects units (mm/cm, kg/g) for accurate measurements
+- **Review Temporal Analysis**: Identifies reviews posted before purchase
+- **Silent Review Detection**: Identifies reviews with no comments
+
+### 5. Anomaly Detection
+- **Customer Location Anomalies**: Identifies inconsistent location data
+- **Seller Location Anomalies**: Detects problematic seller location entries
+- **Automated Corrections**: Applies rules to fix common anomalies
+
+### 6. Data Enrichment
+- **Customer Geolocation**: Adds geographic coordinates to customer records
+- **Seller Geolocation**: Adds geographic coordinates to seller records
+- **Spread Metrics**: Calculates geographic spread for quality assessment
+
+## 📊 Key Outputs
+
+### Processed Data Files
+- **`zip_code_reference.csv`**: Geographic reference with canonical names and coordinates
+- **`customers_with_geolocation.csv`**: Customers enriched with geographic data (99,441 records)
+- **`sellers_with_geolocation.csv`**: Sellers enriched with geographic data (3,095 records)
+- **`customers_standardized.csv`**: Customers with standardized city names
+- **`sellers_standardized.csv`**: Sellers with standardized city names
+- **`financial_analysis/order_items_clean.csv`**: Cleaned order items with anomaly flags
+- **`financial_analysis/order_payments_clean.csv`**: Cleaned order payments with anomaly flags
+- **`financial_analysis/order_financial_reconciliation.csv`**: Financial reconciliation data
+- **`advanced_cleaning/orders_advanced_cleaned.csv`**: Orders with advanced cleaning and documentation
+- **`advanced_cleaning/order_items_advanced_cleaned.csv`**: Order items with advanced cleaning
+- **`advanced_cleaning/order_payments_advanced_cleaned.csv`**: Order payments with advanced cleaning
+- **`product_review_analysis/products_quality_analyzed.csv`**: Products with quality analysis and anomaly flags
+- **`product_review_analysis/reviews_quality_analyzed.csv`**: Reviews with quality analysis and anomaly flags
+
+### Generated Reports
+- **Anomaly Detection Reports**: Detailed analysis of location inconsistencies
+- **Financial Anomaly Reports**: Analysis of payment/order discrepancies
+- **Standardization Reports**: Metrics on data improvement
+- **Quality Assessment Reports**: Comprehensive data quality overview
+
+## 🔗 Key Relationships
+
+### Geographic Integration
+- `customers.customer_zip_code_prefix` → `zip_code_reference.zip_code_prefix`
+- `sellers.seller_zip_code_prefix` → `zip_code_reference.zip_code_prefix`
+- Enables geographic analysis and visualization
+
+## 📈 Analysis Opportunities
+
+- **Geographic Distribution Analysis**: Using standardized coordinates
+- **Location-Based Clustering**: Group customers/sellers by geography
+- **Distance Calculations**: Between customers and sellers for logistics analysis
+- **Regional Performance**: Compare sales across different regions
+- **Delivery Optimization**: Analyze shipping routes using geographic data
+
+## 🤝 Contributing
+
+The project follows this workflow:
+
+1. **Data Preparation**: Use scripts in `scripts/core/` to create reference tables
+2. **Standardization**: Apply standardization scripts to clean location data
+3. **Enrichment**: Add geographic information using reference tables
+4. **Analysis**: Perform analysis using notebooks in `notebooks/`
+5. **Reporting**: Generate reports in `reports/`
 
 ## 📄 License
 
 This dataset is provided by Olist and is available for research and educational purposes.
-
-## 🤝 Contributing
-
-Feel free to add your analysis, scripts, and documentation to this project structure.
