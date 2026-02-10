@@ -1,6 +1,6 @@
 # Brazilian E-Commerce Data Analysis Project
 
-[![Full Pipeline](https://github.com/OWNER/REPO/actions/workflows/pipeline.yml/badge.svg)](https://github.com/OWNER/REPO/actions/workflows/pipeline.yml)
+[![Full Pipeline](https://github.com/DBX-76/olist-ecommerce-analysis/actions/workflows/pipeline.yml/badge.svg)](https://github.com/DBX-76/olist-ecommerce-analysis/actions/workflows/pipeline.yml)
 
 ## 📊 Project Overview
 
