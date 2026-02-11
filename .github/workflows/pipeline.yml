@@ -9,6 +9,9 @@ on:
 jobs:
   run-pipeline:
     runs-on: ubuntu-latest
+    env:
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,6 +25,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      
+            - name: Install kaggle
+        run: pip install kaggle
+
+      - name: Configure Kaggle
+        run: |
+          mkdir -p ~/.kaggle
+          echo "{\"username\":\"${{ secrets.KAGGLE_USERNAME }}\",\"key\":\"${{ secrets.KAGGLE_KEY }}\"}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+
+      - name: Download dataset from Kaggle
+        run: |
+          mkdir -p data/raw
+          kaggle datasets download -d DaBRi76/olist-ecommerce-dataset -p data/raw --unzip
 
       - name: Run pipeline
         run: python run_pipeline.py
