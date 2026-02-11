@@ -26,7 +26,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       
-            - name: Install kaggle
+      - name: Install kaggle
         run: pip install kaggle
 
       - name: Configure Kaggle
