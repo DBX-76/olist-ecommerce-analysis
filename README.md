@@ -250,6 +250,10 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 - **`product_review_analysis/products_quality_analyzed.csv`**: Products with quality analysis and anomaly flags
 - **`product_review_analysis/reviews_quality_analyzed.csv`**: Reviews with quality analysis and anomaly flags
 
+## Documentation
+
+- [Schéma de la base de données](docs/sql/schema.md)
+
 ### Generated Reports
 - **Anomaly Detection Reports**: Detailed analysis of location inconsistencies
 - **Financial Anomaly Reports**: Analysis of payment/order discrepancies
