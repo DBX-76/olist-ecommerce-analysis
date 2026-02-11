@@ -6,6 +6,7 @@ This script analyzes data quality issues and generates a single comprehensive TX
 import pandas as pd
 import numpy as np
 import os
+from pathlib import Path
 import warnings
 from datetime import datetime
 
@@ -25,6 +26,11 @@ REPORTS_PATH = os.path.join(PROJECT_ROOT, 'reports')
 
 # Ensure reports directory exists
 os.makedirs(REPORTS_PATH, exist_ok=True)
+# Create categorized report directories
+DATA_QUALITY_DIR = os.path.join(REPORTS_PATH, 'data_quality')
+CLEANING_DIR = os.path.join(REPORTS_PATH, 'cleaning')
+os.makedirs(DATA_QUALITY_DIR, exist_ok=True)
+os.makedirs(CLEANING_DIR, exist_ok=True)
 
 # Output file
 OUTPUT_FILE = os.path.join(REPORTS_PATH, 'data_quality_analysis_report.txt')
@@ -410,91 +416,3 @@ print_and_write(summary_df.to_string(index=False))
 print_and_write("\n" + "="*80)
 print_and_write("6. DATA CLEANING RECOMMENDATIONS")
 print_and_write("="*80)
-
-recommendations = []
-
-for name, df in data.items():
-    # Check for missing values
-    for col in df.columns:
-        missing_count = df[col].isnull().sum()
-        if missing_count > 0:
-            missing_pct = round((missing_count / df.shape[0]) * 100, 2)
-            
-            if missing_pct > 50:
-                action = "DROP COLUMN - Too many missing values"
-                priority = "HIGH"
-            elif missing_pct > 20:
-                action = "IMPUTE or DROP ROWS - Consider imputation or removal"
-                priority = "MEDIUM"
-            elif missing_pct < 5:
-                action = "IMPUTE - Use mean/median/mode or forward fill"
-                priority = "LOW"
-            else:
-                action = "REVIEW - Investigate cause of missing values"
-                priority = "MEDIUM"
-            
-            recommendations.append({
-                'Dataset': name,
-                'Column': col,
-                'Missing_Percentage': missing_pct,
-                'Priority': priority,
-                'Recommended_Action': action
-            })
-    
-    # Check for duplicates
-    dup_count = df.duplicated().sum()
-    if dup_count > 0:
-        recommendations.append({
-            'Dataset': name,
-            'Column': 'ALL_COLUMNS',
-            'Missing_Percentage': 0,
-            'Priority': 'MEDIUM',
-            'Recommended_Action': f'REMOVE {dup_count} DUPLICATE ROWS'
-        })
-
-if recommendations:
-    rec_df = pd.DataFrame(recommendations)
-    priority_order = {'HIGH': 0, 'MEDIUM': 1, 'LOW': 2}
-    rec_df['Priority_Order'] = rec_df['Priority'].map(priority_order)
-    rec_df = rec_df.sort_values(['Priority_Order', 'Missing_Percentage'], ascending=[True, False])
-    rec_df = rec_df.drop('Priority_Order', axis=1)
-    
-    print_and_write(f"\nTotal recommendations: {len(rec_df)}")
-    print_and_write("\nHIGH Priority Issues:")
-    high_priority = rec_df[rec_df['Priority'] == 'HIGH']
-    if not high_priority.empty:
-        print_and_write(high_priority.to_string(index=False))
-    else:
-        print_and_write("  None")
-    
-    print_and_write("\nMEDIUM Priority Issues:")
-    medium_priority = rec_df[rec_df['Priority'] == 'MEDIUM'].head(10)
-    if not medium_priority.empty:
-        print_and_write(medium_priority.to_string(index=False))
-    else:
-        print_and_write("  None")
-else:
-    print_and_write("\nNo data quality issues found. Data is clean!")
-
-# Final Summary
-print("\n" + "="*80)
-print("ANALYSIS COMPLETE")
-print("="*80)
-
-print("\n")
-
-
-print_and_write(f"\nAnalysis completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-print_and_write("\nKey Findings:")
-print_and_write(f"  - Total datasets analyzed: {len(data)}")
-print_and_write(f"  - Total rows across all datasets: {sum(df.shape[0] for df in data.values()):,}")
-print_and_write(f"  - Datasets with missing values: {sum(1 for df in data.values() if df.isnull().sum().sum() > 0)}")
-print_and_write(f"  - Datasets with duplicates: {sum(1 for df in data.values() if df.duplicated().sum() > 0)}")
-
-print_and_write("\nNext Steps:")
-print_and_write("  1. Review this report for all quality issues")
-print_and_write("  2. Prioritize HIGH priority issues")
-print_and_write("  3. Create data cleaning scripts")
-print_and_write("  4. Validate cleaned data")
-print_and_write("  5. Proceed with advanced analysis")

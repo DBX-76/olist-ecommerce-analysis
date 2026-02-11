@@ -144,7 +144,9 @@ def standardize_sellers():
         validation_report[f'{col}_percentage'] = float(round((df_sellers_final[col].sum() / total_sellers) * 100, 2))
     
     # Sauvegarder le rapport de validation
-    report_path = os.path.join(REPORTS_PATH, 'sellers_standardization_report.csv')
+    sellers_report_dir = os.path.join(REPORTS_PATH, 'sellers')
+    os.makedirs(sellers_report_dir, exist_ok=True)
+    report_path = os.path.join(sellers_report_dir, 'sellers_standardization_report.csv')
     report_df = pd.DataFrame([validation_report])
     report_df.to_csv(report_path, index=False)
     print(f"[OK] Rapport de standardisation sauvegardé: {report_path}")

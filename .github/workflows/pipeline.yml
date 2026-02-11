@@ -1,0 +1,55 @@
+name: Full Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-pipeline:
+    runs-on: ubuntu-latest
+    env:
+      KAGGLE_USERNAME: ${{ secrets.KAGGLE_USERNAME }}
+      KAGGLE_KEY: ${{ secrets.KAGGLE_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Install kaggle
+        run: pip install kaggle
+
+      - name: Configure Kaggle
+        run: |
+          mkdir -p ~/.kaggle
+          echo "{\"username\":\"${{ secrets.KAGGLE_USERNAME }}\",\"key\":\"${{ secrets.KAGGLE_KEY }}\"}" > ~/.kaggle/kaggle.json
+          chmod 600 ~/.kaggle/kaggle.json
+
+      - name: Download dataset from Kaggle
+        run: |
+          mkdir -p data/raw
+          kaggle datasets download -d olistbr/brazilian-ecommerce -p data/raw --unzip
+
+      - name: Create processed data directory
+        run: mkdir -p data/processed
+      
+      - name: Run pipeline
+        run: python run_pipeline.py
+
+      - name: Upload reports and processed data
+        uses: actions/upload-artifact@v4
+        with:
+          name: pipeline-output
+          path: |
+            reports/
+            data/processed/

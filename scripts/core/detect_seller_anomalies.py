@@ -169,7 +169,9 @@ def detect_seller_anomalies():
     validation_report.update(anomaly_report)
     
     # Sauvegarder le rapport de validation
-    report_path = os.path.join(REPORTS_PATH, 'sellers_anomalies_detection_report.csv')
+    sellers_report_dir = os.path.join(REPORTS_PATH, 'sellers')
+    os.makedirs(sellers_report_dir, exist_ok=True)
+    report_path = os.path.join(sellers_report_dir, 'sellers_anomalies_detection_report.csv')
     report_df = pd.DataFrame([validation_report])
     report_df.to_csv(report_path, index=False)
     print(f"[OK] Rapport de détection d'anomalies sauvegardé: {report_path}")

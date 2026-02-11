@@ -2,19 +2,19 @@
 
 ## Vue d'ensemble
 
-Ce guide explique comment identifier et résoudre les problèmes de qualité des données dans votre dataset e-commerce brésilien. Le projet inclut maintenant une analyse complète avec standardisation géographique, détection d'anomalies financières et analyse approfondie des produits et avis.
+Ce guide explique comment identifier et résoudre les problèmes de qualité des données dans votre dataset e-commerce brésilien.
+Le projet inclut maintenant une analyse complète avec standardisation géographique, détection d'anomalies financières et analyse approfondie des produits et avis.
 
 ## Rapports Générés
 
-L'analyse a généré des rapports détaillés dans le dossier [`../reports/`](../reports/):
+L'analyse a généré des rapports détaillés organisés par dossiers sous [`../reports/`](../reports/):
 
-1. **missing_values_report.csv** - Analyse détaillée des valeurs manquantes
-2. **data_types_report.csv** - Information sur les types de données
-3. **duplicates_report.csv** - Analyse des lignes dupliquées
-4. **outliers_report.csv** - Détection des valeurs aberrantes
-5. **data_quality_summary.csv** - Tableau de bord de la qualité globale
-6. **cleaning_recommendations.csv** - Recommandations d'action
-7. **Anomaly Detection Reports** - Analyses détaillées dans [`../reports/anomaly_detection/`](../reports/anomaly_detection/)
+- **reports/data_quality/**: `missing_values_report.csv`, `data_types_report.csv`, `duplicates_report.csv`, `outliers_report.csv`, `data_quality_summary.csv`, `date_consistency_report.csv`
+- **reports/cleaning/**: `cleaning_recommendations.csv`, `cleaning_summary.csv`
+- **reports/customers/**: rapports de standardisation et d'enrichissement des clients
+- **reports/sellers/**: rapports de standardisation, enrichissement et anomalies des vendeurs
+- **reports/zip_code_reference/**: `zip_code_reference_report.csv`
+- **reports/anomaly_detection/**: rapports d'anomalies financières (CSV)
 
 ---
 

@@ -68,4 +68,6 @@ Thumbs.db
 
 # Environment variables
 .env
-.env.local
+.env.localdata/processed/
+data/processed/
+reports/

@@ -1,5 +1,7 @@
 # Brazilian E-Commerce Data Analysis Project
 
+[![Full Pipeline](https://github.com/DBX-76/olist-ecommerce-analysis/actions/workflows/pipeline.yml/badge.svg)](https://github.com/DBX-76/olist-ecommerce-analysis/actions/workflows/pipeline.yml)
+
 ## 📊 Project Overview
 
 This project contains the Brazilian E-Commerce Public Dataset by Olist, a comprehensive collection of data about orders, customers, products, and sellers from a Brazilian marketplace. The project includes advanced data quality analysis, anomaly detection, and geographic data standardization.
@@ -52,7 +54,7 @@ Projet/
 ├── tmp/                        # Temporary files
 ├── requirements.txt            # Python dependencies
 ├── README.md                   # This file
-└── test_anomalies.py           # Test script
+└── test_pipeline.py           # Test script (renamed from test_anomalies.py)
 ```
 
 ## 🚀 Getting Started
@@ -102,6 +104,32 @@ python scripts/analysis/clean_data.py
 6. **View the generated reports**:
    - Open HTML files in [`reports/eda/`](reports/eda/) directory
    - Check anomaly detection reports in [`reports/anomaly_detection/`](reports/anomaly_detection/)
+
+---
+
+**Running the full pipeline (recommended)**
+
+To make it easy to reproduce the full run locally, helper runner scripts are provided.
+
+- `run_pipeline.ps1` — PowerShell runner (Windows).
+- `run_pipeline.py` — Cross-platform Python runner (Windows/macOS/Linux). Recommended if you don't use PowerShell.
+
+From the repository root (PowerShell):
+
+```powershell
+.\run_pipeline.ps1
+```
+
+Or using Python (cross-platform):
+
+```bash
+python run_pipeline.py
+```
+
+Notes:
+- The runners create a virtual environment at `.venv` if missing and install packages from `requirements.txt`.
+- Generated processed data (`data/processed/`) and large reports SHOULD NOT be committed to git. The repository includes `.gitignore` recommendations — keep these files out of version control to keep the repo lightweight.
+- If you prefer to run steps manually, follow the sequence in the Quick Start section above.
 
 ## 🎯 Enhanced Features
 
@@ -221,6 +249,10 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 - **`advanced_cleaning/order_payments_advanced_cleaned.csv`**: Order payments with advanced cleaning
 - **`product_review_analysis/products_quality_analyzed.csv`**: Products with quality analysis and anomaly flags
 - **`product_review_analysis/reviews_quality_analyzed.csv`**: Reviews with quality analysis and anomaly flags
+
+## Documentation
+
+- [Schéma de la base de données](docs/sql/schema.md)
 
 ### Generated Reports
 - **Anomaly Detection Reports**: Detailed analysis of location inconsistencies
