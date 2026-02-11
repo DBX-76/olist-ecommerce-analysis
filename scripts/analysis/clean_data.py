@@ -309,37 +309,43 @@ summary_df = pd.DataFrame(cleaning_summary)
 print("\nCleaning Summary:")
 print(summary_df.to_string(index=False))
 
-# Save summary
-summary_df.to_csv(os.path.join(REPORTS_PATH, 'cleaning_summary.csv'), index=False)
-print(f"\n[OK] Cleaning summary saved: {os.path.join(REPORTS_PATH, 'cleaning_summary.csv')}")
-
-# Final summary
-print("\n" + "="*80)
-print("CLEANING COMPLETE")
-print("="*80)
-
-print(f"\nCleaned datasets saved to: {PROCESSED_DATA_CLEANED_PATH}")
-print("\nFiles created:")
-for filename in os.listdir(PROCESSED_DATA_CLEANED_PATH):
-    if filename.endswith('_clean.csv'):
-        filepath = os.path.join(PROCESSED_DATA_CLEANED_PATH, filename)
-        df = pd.read_csv(filepath)
-        print(f"  - {filename}: {df.shape[0]:,} rows x {df.shape[1]} columns")
-
-print(f"\nCleaning completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-print("\nNext Steps:")
-print("  1. Validate cleaned datasets")
-print("  2. Proceed with exploratory data analysis")
-print("  3. Create visualizations and reports")
-
-# Write detailed cleaning report to reports/cleaning
+# Create combined cleaning report in text format
 cleaning_report_dir = os.path.join(REPORTS_PATH, 'cleaning')
 os.makedirs(cleaning_report_dir, exist_ok=True)
-if report_entries:
-    report_df = pd.DataFrame(report_entries)
-    report_path = os.path.join(cleaning_report_dir, f"cleaning_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
-    report_df.to_csv(report_path, index=False)
-    print(f"[OK] Detailed cleaning report written to: {report_path}")
-else:
-    print("[OK] No detailed cleaning actions to report.")
+report_path = os.path.join(cleaning_report_dir, f"cleaning_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
+
+with open(report_path, 'w', encoding='utf-8') as f:
+    # Write cleaning summary
+    f.write("="*80 + "\n")
+    f.write("CLEANING SUMMARY\n")
+    f.write("="*80 + "\n\n")
+    f.write(summary_df.to_string(index=False) + "\n\n")
+    
+    # Write detailed cleaning report
+    if report_entries:
+        f.write("="*80 + "\n")
+        f.write("DETAILED CLEANING REPORT\n")
+        f.write("="*80 + "\n\n")
+        report_df = pd.DataFrame(report_entries)
+        f.write(report_df.to_string(index=False) + "\n\n")
+    else:
+        f.write("No detailed cleaning actions to report.\n\n")
+    
+    # Write additional information
+    f.write("="*80 + "\n")
+    f.write("CLEANING COMPLETE\n")
+    f.write("="*80 + "\n\n")
+    f.write(f"Cleaned datasets saved to: {PROCESSED_DATA_CLEANED_PATH}\n\n")
+    f.write("Files created:\n")
+    for filename in os.listdir(PROCESSED_DATA_CLEANED_PATH):
+        if filename.endswith('_clean.csv'):
+            filepath = os.path.join(PROCESSED_DATA_CLEANED_PATH, filename)
+            df = pd.read_csv(filepath)
+            f.write(f"  - {filename}: {df.shape[0]:,} rows x {df.shape[1]} columns\n")
+    f.write(f"\nCleaning completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+    f.write("Next Steps:\n")
+    f.write("  1. Validate cleaned datasets\n")
+    f.write("  2. Proceed with exploratory data analysis\n")
+    f.write("  3. Create visualizations and reports\n")
+
+print(f"\n[OK] Combined cleaning report saved: {report_path}")
