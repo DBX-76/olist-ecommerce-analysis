@@ -46,8 +46,10 @@ jobs:
       - name: Run pipeline
         run: python run_pipeline.py
 
-      - name: Upload reports
+      - name: Upload reports and processed data
         uses: actions/upload-artifact@v4
         with:
-          name: reports
-          path: reports/
+          name: pipeline-output
+          path: |
+            reports/
+            data/processed/
