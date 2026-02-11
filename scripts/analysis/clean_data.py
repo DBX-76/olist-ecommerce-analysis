@@ -35,13 +35,13 @@ print("\nBefore cleaning:")
 print(f"  Columns: {list(df_reviews.columns)}")
 print(f"  Missing values:\n{df_reviews.isnull().sum()}")
 
-# Fill missing values with "non renseigné"
+# Fill missing values with "no comment"
 # These columns are related to review_score and should be kept
 df_reviews_clean = df_reviews.copy()
-df_reviews_clean['review_comment_title'] = df_reviews_clean['review_comment_title'].fillna('non renseigné')
-df_reviews_clean['review_comment_message'] = df_reviews_clean['review_comment_message'].fillna('non renseigné')
+df_reviews_clean['review_comment_title'] = df_reviews_clean['review_comment_title'].fillna('no comment')
+df_reviews_clean['review_comment_message'] = df_reviews_clean['review_comment_message'].fillna('no comment')
 
-print(f"\nFilled missing values with 'non renseigné':")
+print(f"\nFilled missing values with 'no comment':")
 print(f"  - review_comment_title")
 print(f"  - review_comment_message")
 
@@ -94,7 +94,13 @@ if remove_product_id in df_products['product_id'].values:
 #  - do NOT impute `product_photos_qty` (no longer needed)
 #  - impute size/weight columns for category 'bebes' using the category median
 #  - keep imputing lightweight textual/length columns globally
-global_numeric_cols = ['product_name_lenght', 'product_description_lenght']
+global_numeric_cols = ['product_name_length', 'product_description_length']
+
+# Rename columns to fix spelling
+df_products = df_products.rename(columns={
+    'product_name_lenght': 'product_name_length',
+    'product_description_lenght': 'product_description_length'
+})
 bebes_cols = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
 
 # Ensure category column exists and fill unknowns
@@ -267,7 +273,7 @@ cleaning_summary = [
         'Cleaned_Rows': df_reviews_clean.shape[0],
         'Cleaned_Columns': df_reviews_clean.shape[1],
         'Columns_Dropped': 0,
-        'Action': 'Filled 2 columns with "non renseigné"'
+        'Action': 'Filled 2 columns with "no comment"'
     },
     {
         'Dataset': 'products',
