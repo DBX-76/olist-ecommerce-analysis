@@ -9,6 +9,7 @@ with open('config/config.yaml', 'r') as f:
 
 RAW_DATA_PATH = config['paths']['raw_data']
 PROCESSED_DATA_PATH = config['paths']['processed_data']
+PROCESSED_DATA_CLEANED_PATH = os.path.join(PROCESSED_DATA_PATH, 'cleaned')
 REPORTS_PATH = config['paths']['reports']
 
 # Load raw datasets
@@ -64,8 +65,8 @@ if removed_reviews:
     print(f"  Removed {removed_reviews} exact duplicate row(s) from order_reviews")
 
 # Save cleaned dataset
-df_reviews_clean.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_order_reviews_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_order_reviews_clean.csv')}")
+df_reviews_clean.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_order_reviews_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_order_reviews_clean.csv')}")
 
 # 2. Clean products dataset
 print("\n" + "="*80)
@@ -73,7 +74,7 @@ print("2. CLEANING PRODUCTS DATASET")
 print("="*80)
 
 df_products['product_category_name'] = df_products['product_category_name'].fillna('unknown')
-df_products.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv'), index=False)
+df_products.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv'), index=False)
 print("\nBefore cleaning:")
 print(f"  Missing values:\n{df_products.isnull().sum()}")
 
@@ -157,8 +158,8 @@ if removed_products:
     print(f"  Removed {removed_products} exact duplicate row(s) from products")
 
 # Save cleaned dataset
-df_products.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv')}")
+df_products.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv')}")
 
 # 3. Clean orders dataset
 print("\n" + "="*80)
@@ -195,8 +196,8 @@ if removed_orders:
     print(f"  Removed {removed_orders} exact duplicate row(s) from orders")
 
 # Save orders dataset (unchanged, but documented)
-df_orders.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_orders_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_orders_clean.csv')}")
+df_orders.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_orders_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_orders_clean.csv')}")
 
 # 4. Clean geolocation dataset
 print("\n" + "="*80)
@@ -226,8 +227,8 @@ print(f"  Rows: {df_geolocation_clean.shape[0]:,}")
 print(f"  Duplicates removed: {removed_geo}")
 
 # Save cleaned dataset
-df_geolocation_clean.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_geolocation_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_geolocation_clean.csv')}")
+df_geolocation_clean.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_geolocation_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_geolocation_clean.csv')}")
 
 # 5. Copy other datasets (no cleaning needed)
 print("\n" + "="*80)
@@ -249,7 +250,7 @@ for name, filename in other_datasets.items():
     df = df.drop_duplicates()
     removed_other = before_other - len(df)
     output_filename = filename.replace('.csv', '_clean.csv')
-    df.to_csv(os.path.join(PROCESSED_DATA_PATH, output_filename), index=False)
+    df.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, output_filename), index=False)
     print(f"[OK] Copied {name} -> {output_filename} (removed {removed_other} duplicates)")
     if removed_other:
         report_entries.append({
@@ -317,11 +318,11 @@ print("\n" + "="*80)
 print("CLEANING COMPLETE")
 print("="*80)
 
-print(f"\nCleaned datasets saved to: {PROCESSED_DATA_PATH}")
+print(f"\nCleaned datasets saved to: {PROCESSED_DATA_CLEANED_PATH}")
 print("\nFiles created:")
-for filename in os.listdir(PROCESSED_DATA_PATH):
+for filename in os.listdir(PROCESSED_DATA_CLEANED_PATH):
     if filename.endswith('_clean.csv'):
-        filepath = os.path.join(PROCESSED_DATA_PATH, filename)
+        filepath = os.path.join(PROCESSED_DATA_CLEANED_PATH, filename)
         df = pd.read_csv(filepath)
         print(f"  - {filename}: {df.shape[0]:,} rows x {df.shape[1]} columns")
 
