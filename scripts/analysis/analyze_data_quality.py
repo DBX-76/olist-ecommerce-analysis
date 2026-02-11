@@ -1,6 +1,6 @@
 """
 Data Quality Analysis Script for Brazilian E-Commerce Dataset
-This script analyzes data quality issues and generates comprehensive reports.
+This script analyzes data quality issues and generates a single comprehensive TXT report.
 """
 
 import pandas as pd
@@ -18,12 +18,26 @@ pd.set_option('display.width', None)
 
 # Define paths (using absolute paths from project root)
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+# Go up two levels from scripts/analysis/ to reach project root
+PROJECT_ROOT = os.path.dirname(os.path.dirname(SCRIPT_DIR))
 RAW_DATA_PATH = os.path.join(PROJECT_ROOT, 'data', 'raw')
 REPORTS_PATH = os.path.join(PROJECT_ROOT, 'reports')
 
 # Ensure reports directory exists
 os.makedirs(REPORTS_PATH, exist_ok=True)
+
+# Output file
+OUTPUT_FILE = os.path.join(REPORTS_PATH, 'data_quality_analysis_report.txt')
+
+# Clear existing file
+if os.path.exists(OUTPUT_FILE):
+    os.remove(OUTPUT_FILE)
+
+def print_and_write(text):
+    """Print to console and write to output file"""
+    print(text)
+    with open(OUTPUT_FILE, 'a', encoding='utf-8') as f:
+        f.write(text + '\n')
 
 # Define dataset files
 datasets = {
@@ -38,13 +52,13 @@ datasets = {
     'category_translation': 'product_category_name_translation.csv'
 }
 
-print("="*80)
-print("DATA QUALITY ANALYSIS - BRAZILIAN E-COMMERCE DATASET")
-print("="*80)
-print(f"Analysis started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print_and_write("="*80)
+print_and_write("DATA QUALITY ANALYSIS - BRAZILIAN E-COMMERCE DATASET")
+print_and_write("="*80)
+print_and_write(f"Analysis started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
 # Load all datasets
-print("\nLoading datasets...")
+print_and_write("\nLoading datasets...")
 data = {}
 
 for name, filename in datasets.items():
@@ -52,16 +66,16 @@ for name, filename in datasets.items():
     try:
         df = pd.read_csv(filepath)
         data[name] = df
-        print(f"  [OK] {name}: {df.shape[0]:,} rows x {df.shape[1]} columns")
+        print_and_write(f"  [OK] {name}: {df.shape[0]:,} rows x {df.shape[1]} columns")
     except Exception as e:
-        print(f"  [ERROR] {name}: {e}")
+        print_and_write(f"  [ERROR] {name}: {e}")
 
-print(f"\nTotal datasets loaded: {len(data)}")
+print_and_write(f"\nTotal datasets loaded: {len(data)}")
 
 # 1. Comprehensive Missing Value Analysis
-print("\n" + "="*80)
-print("1. MISSING VALUE ANALYSIS")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("1. MISSING VALUE ANALYSIS")
+print_and_write("="*80)
 
 missing_report = []
 
@@ -98,20 +112,16 @@ if missing_report:
     missing_df = missing_df.sort_values(['Severity_Order', 'Missing_Percentage'], ascending=[True, False])
     missing_df = missing_df.drop('Severity_Order', axis=1)
     
-    print(f"\nTotal columns with missing values: {len(missing_df)}")
-    print("\nTop 20 missing value issues:")
-    print(missing_df.head(20).to_string(index=False))
-    
-    # Save to CSV
-    missing_df.to_csv(os.path.join(REPORTS_PATH, 'missing_values_report.csv'), index=False)
-    print(f"\n[OK] Missing values report saved: {os.path.join(REPORTS_PATH, 'missing_values_report.csv')}")
+    print_and_write(f"\nTotal columns with missing values: {len(missing_df)}")
+    print_and_write("\nTop 20 missing value issues:")
+    print_and_write(missing_df.head(20).to_string(index=False))
 else:
-    print("\nNo missing values found in any dataset!")
+    print_and_write("\nNo missing values found in any dataset!")
 
 # 2. Data Type Analysis
-print("\n" + "="*80)
-print("2. DATA TYPE ANALYSIS")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("2. DATA TYPE ANALYSIS")
+print_and_write("="*80)
 
 dtype_report = []
 
@@ -127,17 +137,14 @@ for name, df in data.items():
         })
 
 dtype_df = pd.DataFrame(dtype_report)
-print(f"\nTotal columns analyzed: {len(dtype_df)}")
-print("\nData type distribution:")
-print(dtype_df['Data_Type'].value_counts().to_string())
-
-dtype_df.to_csv(os.path.join(REPORTS_PATH, 'data_types_report.csv'), index=False)
-print(f"\n[OK] Data types report saved: {os.path.join(REPORTS_PATH, 'data_types_report.csv')}")
+print_and_write(f"\nTotal columns analyzed: {len(dtype_df)}")
+print_and_write("\nData type distribution:")
+print_and_write(dtype_df['Data_Type'].value_counts().to_string())
 
 # 3. Duplicate Analysis
-print("\n" + "="*80)
-print("3. DUPLICATE ANALYSIS")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("3. DUPLICATE ANALYSIS")
+print_and_write("="*80)
 
 duplicate_report = []
 
@@ -150,19 +157,15 @@ for name, df in data.items():
             'Duplicate_Percentage': round((dup_count / df.shape[0]) * 100, 2),
             'Total_Rows': df.shape[0]
         })
-        print(f"\n{name}: {dup_count:,} duplicates ({round((dup_count / df.shape[0]) * 100, 2)}%)")
+        print_and_write(f"\n{name}: {dup_count:,} duplicates ({round((dup_count / df.shape[0]) * 100, 2)}%)")
 
-if duplicate_report:
-    dup_df = pd.DataFrame(duplicate_report)
-    dup_df.to_csv(os.path.join(REPORTS_PATH, 'duplicates_report.csv'), index=False)
-    print(f"\n[OK] Duplicates report saved: {os.path.join(REPORTS_PATH, 'duplicates_report.csv')}")
-else:
-    print("\nNo duplicates found in any dataset!")
+if not duplicate_report:
+    print_and_write("\nNo duplicates found in any dataset!")
 
 # 3.5 Duplicate Columns Detection
-print("\n" + "="*80)
-print("3.5. DUPLICATE COLUMNS DETECTION")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("3.5. DUPLICATE COLUMNS DETECTION")
+print_and_write("="*80)
 
 duplicate_columns_report = []
 
@@ -182,21 +185,17 @@ for name, df in data.items():
                 })
     
     if duplicates_found:
-        print(f"\n{name}: Found {len(duplicates_found)} duplicate column pair(s)")
+        print_and_write(f"\n{name}: Found {len(duplicates_found)} duplicate column pair(s)")
         for col1, col2 in duplicates_found:
-            print(f"  - {col1} == {col2}")
+            print_and_write(f"  - {col1} == {col2}")
 
-if duplicate_columns_report:
-    dup_cols_df = pd.DataFrame(duplicate_columns_report)
-    dup_cols_df.to_csv(os.path.join(REPORTS_PATH, 'duplicate_columns_report.csv'), index=False)
-    print(f"\n[OK] Duplicate columns report saved: {os.path.join(REPORTS_PATH, 'duplicate_columns_report.csv')}")
-else:
-    print("\nNo duplicate columns found in any dataset!")
+if not duplicate_columns_report:
+    print_and_write("\nNo duplicate columns found in any dataset!")
 
 # 4. Date Consistency Check
-print("\n" + "="*80)
-print("4. DATE CONSISTENCY CHECK")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("4. DATE CONSISTENCY CHECK")
+print_and_write("="*80)
 
 date_consistency_report = []
 
@@ -289,54 +288,50 @@ if 'orders' in data:
         'Longest_Transit_Time': transit_times['transit_days'].max() if not transit_times.empty else 0
     })
     
-    print(f"\nOrders Dataset:")
-    print(f"  Total delivered orders: {len(delivered_orders)}")
-    print(f"  Delivered without delivery date: {len(delivered_without_date)}")
-    print(f"  Date order violations: {len(date_order_violations)}")
-    print(f"  Carrier date after delivery: {len(carrier_after_delivery)}")
-    print(f"  Late Deliveries: {len(late_deliveries)} ({round(len(late_deliveries)/len(delivered_orders)*100, 2)}%)")
-    print(f"  Long Transit Times (>30 days): {len(long_transit)} ({round(len(long_transit)/len(delivered_orders)*100, 2)}%)")
+    print_and_write(f"\nOrders Dataset:")
+    print_and_write(f"  Total delivered orders: {len(delivered_orders)}")
+    print_and_write(f"  Delivered without delivery date: {len(delivered_without_date)}")
+    print_and_write(f"  Date order violations: {len(date_order_violations)}")
+    print_and_write(f"  Carrier date after delivery: {len(carrier_after_delivery)}")
+    print_and_write(f"  Late Deliveries: {len(late_deliveries)} ({round(len(late_deliveries)/len(delivered_orders)*100, 2)}%)")
+    print_and_write(f"  Long Transit Times (>30 days): {len(long_transit)} ({round(len(long_transit)/len(delivered_orders)*100, 2)}%)")
     if not transit_times.empty:
-        print(f"  Longest Transit Time: {transit_times['transit_days'].max()} days")
-    print(f"  Timestamp Logic Errors: {len(timestamp_errors)} ({round(len(timestamp_errors)/len(delivered_orders)*100, 2)}%)")
-    print(f"  Delivery Sequence Issues: {len(delivery_sequence_errors)}")
-    print(f"  Missing Critical Data: {len(missing_data)}")
+        print_and_write(f"  Longest Transit Time: {transit_times['transit_days'].max()} days")
+    print_and_write(f"  Timestamp Logic Errors: {len(timestamp_errors)} ({round(len(timestamp_errors)/len(delivered_orders)*100, 2)}%)")
+    print_and_write(f"  Delivery Sequence Issues: {len(delivery_sequence_errors)}")
+    print_and_write(f"  Missing Critical Data: {len(missing_data)}")
     
     if len(delivered_without_date) > 0:
-        print(f"  [WARNING] {len(delivered_without_date)} delivered orders missing delivery date")
+        print_and_write(f"  [WARNING] {len(delivered_without_date)} delivered orders missing delivery date")
     
     if len(date_order_violations) > 0:
-        print(f"  [WARNING] {len(date_order_violations)} orders with incorrect date sequence")
+        print_and_write(f"  [WARNING] {len(date_order_violations)} orders with incorrect date sequence")
     
     if len(carrier_after_delivery) > 0:
-        print(f"  [WARNING] {len(carrier_after_delivery)} orders with carrier date after delivery")
+        print_and_write(f"  [WARNING] {len(carrier_after_delivery)} orders with carrier date after delivery")
     
     if len(late_deliveries) > 0:
-        print(f"  [WARNING] {len(late_deliveries)} orders delivered after estimated date")
+        print_and_write(f"  [WARNING] {len(late_deliveries)} orders delivered after estimated date")
     
     if len(long_transit) > 0:
-        print(f"  [WARNING] {len(long_transit)} orders with transit time > 30 days")
+        print_and_write(f"  [WARNING] {len(long_transit)} orders with transit time > 30 days")
     
     if len(timestamp_errors) > 0:
-        print(f"  [WARNING] {len(timestamp_errors)} orders with carrier pickup before approval")
+        print_and_write(f"  [WARNING] {len(timestamp_errors)} orders with carrier pickup before approval")
     
     if len(delivery_sequence_errors) > 0:
-        print(f"  [WARNING] {len(delivery_sequence_errors)} orders delivered before carrier pickup")
+        print_and_write(f"  [WARNING] {len(delivery_sequence_errors)} orders delivered before carrier pickup")
     
     if len(missing_data) > 0:
-        print(f"  [WARNING] {len(missing_data)} orders with missing critical data")
+        print_and_write(f"  [WARNING] {len(missing_data)} orders with missing critical data")
 
-if date_consistency_report:
-    date_df = pd.DataFrame(date_consistency_report)
-    date_df.to_csv(os.path.join(REPORTS_PATH, 'date_consistency_report.csv'), index=False)
-    print(f"\n[OK] Date consistency report saved: {os.path.join(REPORTS_PATH, 'date_consistency_report.csv')}")
-else:
-    print("\nNo date columns found for consistency check.")
+if not date_consistency_report:
+    print_and_write("\nNo date columns found for consistency check.")
 
 # 5. Outlier Detection
-print("\n" + "="*80)
-print("5. OUTLIER DETECTION (IQR Method)")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("5. OUTLIER DETECTION (IQR Method)")
+print_and_write("="*80)
 
 outlier_report = []
 
@@ -370,19 +365,16 @@ for name, df in data.items():
 
 if outlier_report:
     outlier_df = pd.DataFrame(outlier_report)
-    print(f"\nTotal columns with outliers: {len(outlier_df)}")
-    print("\nTop 10 columns with most outliers:")
-    print(outlier_df.sort_values('Outlier_Count', ascending=False).head(10).to_string(index=False))
-    
-    outlier_df.to_csv(os.path.join(REPORTS_PATH, 'outliers_report.csv'), index=False)
-    print(f"\n[OK] Outliers report saved: {os.path.join(REPORTS_PATH, 'outliers_report.csv')}")
+    print_and_write(f"\nTotal columns with outliers: {len(outlier_df)}")
+    print_and_write("\nTop 10 columns with most outliers:")
+    print_and_write(outlier_df.sort_values('Outlier_Count', ascending=False).head(10).to_string(index=False))
 else:
-    print("\nNo outliers detected in numerical columns.")
+    print_and_write("\nNo outliers detected in numerical columns.")
 
 # 6. Data Quality Summary
-print("\n" + "="*80)
-print("6. DATA QUALITY SUMMARY")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("6. DATA QUALITY SUMMARY")
+print_and_write("="*80)
 
 quality_summary = []
 
@@ -411,16 +403,13 @@ for name, df in data.items():
 summary_df = pd.DataFrame(quality_summary)
 summary_df = summary_df.sort_values('Missing_Percentage', ascending=False)
 
-print("\nData Quality Dashboard:")
-print(summary_df.to_string(index=False))
-
-summary_df.to_csv(os.path.join(REPORTS_PATH, 'data_quality_summary.csv'), index=False)
-print(f"\n[OK] Data quality summary saved: {os.path.join(REPORTS_PATH, 'data_quality_summary.csv')}")
+print_and_write("\nData Quality Dashboard:")
+print_and_write(summary_df.to_string(index=False))
 
 # 6. Cleaning Recommendations
-print("\n" + "="*80)
-print("6. DATA CLEANING RECOMMENDATIONS")
-print("="*80)
+print_and_write("\n" + "="*80)
+print_and_write("6. DATA CLEANING RECOMMENDATIONS")
+print_and_write("="*80)
 
 recommendations = []
 
@@ -470,52 +459,42 @@ if recommendations:
     rec_df = rec_df.sort_values(['Priority_Order', 'Missing_Percentage'], ascending=[True, False])
     rec_df = rec_df.drop('Priority_Order', axis=1)
     
-    print(f"\nTotal recommendations: {len(rec_df)}")
-    print("\nHIGH Priority Issues:")
+    print_and_write(f"\nTotal recommendations: {len(rec_df)}")
+    print_and_write("\nHIGH Priority Issues:")
     high_priority = rec_df[rec_df['Priority'] == 'HIGH']
     if not high_priority.empty:
-        print(high_priority.to_string(index=False))
+        print_and_write(high_priority.to_string(index=False))
     else:
-        print("  None")
+        print_and_write("  None")
     
-    print("\nMEDIUM Priority Issues:")
+    print_and_write("\nMEDIUM Priority Issues:")
     medium_priority = rec_df[rec_df['Priority'] == 'MEDIUM'].head(10)
     if not medium_priority.empty:
-        print(medium_priority.to_string(index=False))
+        print_and_write(medium_priority.to_string(index=False))
     else:
-        print("  None")
-    
-    rec_df.to_csv(os.path.join(REPORTS_PATH, 'cleaning_recommendations.csv'), index=False)
-    print(f"\n[OK] Cleaning recommendations saved: {os.path.join(REPORTS_PATH, 'cleaning_recommendations.csv')}")
+        print_and_write("  None")
 else:
-    print("\nNo data quality issues found. Data is clean!")
+    print_and_write("\nNo data quality issues found. Data is clean!")
 
 # Final Summary
 print("\n" + "="*80)
 print("ANALYSIS COMPLETE")
 print("="*80)
 
-print("\nGenerated Reports:")
-print("  1. missing_values_report.csv - Detailed missing value analysis")
-print("  2. data_types_report.csv - Data type information")
-print("  3. duplicates_report.csv - Duplicate row analysis")
-print("  4. duplicate_columns_report.csv - Duplicate column detection")
-print("  5. outliers_report.csv - Outlier detection")
-print("  6. date_consistency_report.csv - Date consistency and logic checks")
-print("  7. data_quality_summary.csv - Overall quality dashboard")
-print("  8. cleaning_recommendations.csv - Actionable recommendations")
+print("\n")
 
-print(f"\nAnalysis completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-print("\nKey Findings:")
-print(f"  - Total datasets analyzed: {len(data)}")
-print(f"  - Total rows across all datasets: {sum(df.shape[0] for df in data.values()):,}")
-print(f"  - Datasets with missing values: {sum(1 for df in data.values() if df.isnull().sum().sum() > 0)}")
-print(f"  - Datasets with duplicates: {sum(1 for df in data.values() if df.duplicated().sum() > 0)}")
+print_and_write(f"\nAnalysis completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
 
-print("\nNext Steps:")
-print("  1. Review cleaning recommendations in reports/cleaning_recommendations.csv")
-print("  2. Prioritize HIGH priority issues")
-print("  3. Create data cleaning scripts")
-print("  4. Validate cleaned data")
-print("  5. Proceed with advanced analysis")
+print_and_write("\nKey Findings:")
+print_and_write(f"  - Total datasets analyzed: {len(data)}")
+print_and_write(f"  - Total rows across all datasets: {sum(df.shape[0] for df in data.values()):,}")
+print_and_write(f"  - Datasets with missing values: {sum(1 for df in data.values() if df.isnull().sum().sum() > 0)}")
+print_and_write(f"  - Datasets with duplicates: {sum(1 for df in data.values() if df.duplicated().sum() > 0)}")
+
+print_and_write("\nNext Steps:")
+print_and_write("  1. Review this report for all quality issues")
+print_and_write("  2. Prioritize HIGH priority issues")
+print_and_write("  3. Create data cleaning scripts")
+print_and_write("  4. Validate cleaned data")
+print_and_write("  5. Proceed with advanced analysis")
