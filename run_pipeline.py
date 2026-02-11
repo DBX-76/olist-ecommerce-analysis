@@ -51,6 +51,7 @@ def main():
         "scripts/core/detect_seller_anomalies.py",
         "scripts/core/standardize_sellers.py",
         "scripts/core/enrich_sellers_with_geolocation.py",
+        "scripts/core/merge_product_translations.py",  
         "scripts/analysis/analyze_data_quality.py",
         "test_pipeline.py",
     ]
