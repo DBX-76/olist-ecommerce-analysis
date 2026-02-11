@@ -38,7 +38,7 @@ jobs:
       - name: Download dataset from Kaggle
         run: |
           mkdir -p data/raw
-          kaggle datasets download -d DaBRi76/olist-ecommerce-dataset -p data/raw --unzip
+          kaggle datasets download -d olistbr/brazilian-ecommerce -p data/raw --unzip
 
       - name: Run pipeline
         run: python run_pipeline.py
