@@ -40,6 +40,9 @@ jobs:
           mkdir -p data/raw
           kaggle datasets download -d olistbr/brazilian-ecommerce -p data/raw --unzip
 
+      - name: Create processed data directory
+        run: mkdir -p data/processed
+      
       - name: Run pipeline
         run: python run_pipeline.py
 
