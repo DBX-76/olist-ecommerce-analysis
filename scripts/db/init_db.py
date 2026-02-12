@@ -71,6 +71,20 @@ def create_tables():
         );
         """,
         """
+        CREATE TABLE IF NOT EXISTS products (
+            product_id VARCHAR(50) PRIMARY KEY,
+            product_category_name VARCHAR(100),
+            product_category_name_english VARCHAR(100),
+            product_name_lenght INT,
+            product_description_lenght INT,
+            product_photos_qty INT,
+            product_weight_g INT,
+            product_length_cm INT,
+            product_height_cm INT,
+            product_width_cm INT
+        );
+        """,
+        """
         CREATE TABLE IF NOT EXISTS orders (
             order_id VARCHAR(50) PRIMARY KEY,
             customer_id VARCHAR(50),
@@ -106,20 +120,6 @@ def create_tables():
             payment_installments INT,
             payment_value DECIMAL(10, 2),
             FOREIGN KEY (order_id) REFERENCES orders(order_id)
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS products (
-            product_id VARCHAR(50) PRIMARY KEY,
-            product_category_name VARCHAR(100),
-            product_category_name_english VARCHAR(100),
-            product_name_lenght INT,
-            product_description_lenght INT,
-            product_photos_qty INT,
-            product_weight_g INT,
-            product_length_cm INT,
-            product_height_cm INT,
-            product_width_cm INT
         );
         """,
         """
