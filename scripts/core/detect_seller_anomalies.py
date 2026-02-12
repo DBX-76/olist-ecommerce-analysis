@@ -171,9 +171,18 @@ def detect_seller_anomalies():
     # Sauvegarder le rapport de validation
     sellers_report_dir = os.path.join(REPORTS_PATH, 'sellers')
     os.makedirs(sellers_report_dir, exist_ok=True)
-    report_path = os.path.join(sellers_report_dir, 'sellers_anomalies_detection_report.csv')
-    report_df = pd.DataFrame([validation_report])
-    report_df.to_csv(report_path, index=False)
+    report_path = os.path.join(sellers_report_dir, 'sellers_anomalies_detection_report.txt')
+    
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write("RAPPORT DE DÉTECTION D'ANOMALIES VENDEURS\n")
+        f.write("="*80 + "\n\n")
+        for key, value in validation_report.items():
+            # Formater les clés pour une meilleure lisibilité
+            formatted_key = key.replace('_', ' ').capitalize()
+            if isinstance(value, float):
+                f.write(f"{formatted_key}: {value:.2f}\n")
+            else:
+                f.write(f"{formatted_key}: {value:,}\n")
     print(f"[OK] Rapport de détection d'anomalies sauvegardé: {report_path}")
     
     print(f"\nProcessus de détection d'anomalies terminé avec succès!")
