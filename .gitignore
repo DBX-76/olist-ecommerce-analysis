@@ -71,3 +71,6 @@ Thumbs.db
 .env.localdata/processed/
 data/processed/
 reports/
+
+# Fichiers non pertinents
+queryex

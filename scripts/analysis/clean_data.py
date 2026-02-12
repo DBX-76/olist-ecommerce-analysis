@@ -9,6 +9,7 @@ with open('config/config.yaml', 'r') as f:
 
 RAW_DATA_PATH = config['paths']['raw_data']
 PROCESSED_DATA_PATH = config['paths']['processed_data']
+PROCESSED_DATA_CLEANED_PATH = os.path.join(PROCESSED_DATA_PATH, 'cleaned')
 REPORTS_PATH = config['paths']['reports']
 
 # Load raw datasets
@@ -35,13 +36,13 @@ print("\nBefore cleaning:")
 print(f"  Columns: {list(df_reviews.columns)}")
 print(f"  Missing values:\n{df_reviews.isnull().sum()}")
 
-# Fill missing values with "non renseigné"
+# Fill missing values with "no comment"
 # These columns are related to review_score and should be kept
 df_reviews_clean = df_reviews.copy()
-df_reviews_clean['review_comment_title'] = df_reviews_clean['review_comment_title'].fillna('non renseigné')
-df_reviews_clean['review_comment_message'] = df_reviews_clean['review_comment_message'].fillna('non renseigné')
+df_reviews_clean['review_comment_title'] = df_reviews_clean['review_comment_title'].fillna('no comment')
+df_reviews_clean['review_comment_message'] = df_reviews_clean['review_comment_message'].fillna('no comment')
 
-print(f"\nFilled missing values with 'non renseigné':")
+print(f"\nFilled missing values with 'no comment':")
 print(f"  - review_comment_title")
 print(f"  - review_comment_message")
 
@@ -64,8 +65,8 @@ if removed_reviews:
     print(f"  Removed {removed_reviews} exact duplicate row(s) from order_reviews")
 
 # Save cleaned dataset
-df_reviews_clean.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_order_reviews_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_order_reviews_clean.csv')}")
+df_reviews_clean.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_order_reviews_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_order_reviews_clean.csv')}")
 
 # 2. Clean products dataset
 print("\n" + "="*80)
@@ -73,7 +74,7 @@ print("2. CLEANING PRODUCTS DATASET")
 print("="*80)
 
 df_products['product_category_name'] = df_products['product_category_name'].fillna('unknown')
-df_products.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv'), index=False)
+df_products.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv'), index=False)
 print("\nBefore cleaning:")
 print(f"  Missing values:\n{df_products.isnull().sum()}")
 
@@ -94,7 +95,13 @@ if remove_product_id in df_products['product_id'].values:
 #  - do NOT impute `product_photos_qty` (no longer needed)
 #  - impute size/weight columns for category 'bebes' using the category median
 #  - keep imputing lightweight textual/length columns globally
-global_numeric_cols = ['product_name_lenght', 'product_description_lenght']
+global_numeric_cols = ['product_name_length', 'product_description_length']
+
+# Rename columns to fix spelling
+df_products = df_products.rename(columns={
+    'product_name_lenght': 'product_name_length',
+    'product_description_lenght': 'product_description_length'
+})
 bebes_cols = ['product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']
 
 # Ensure category column exists and fill unknowns
@@ -151,8 +158,8 @@ if removed_products:
     print(f"  Removed {removed_products} exact duplicate row(s) from products")
 
 # Save cleaned dataset
-df_products.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_products_clean.csv')}")
+df_products.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_products_clean.csv')}")
 
 # 3. Clean orders dataset
 print("\n" + "="*80)
@@ -189,8 +196,8 @@ if removed_orders:
     print(f"  Removed {removed_orders} exact duplicate row(s) from orders")
 
 # Save orders dataset (unchanged, but documented)
-df_orders.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_orders_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_orders_clean.csv')}")
+df_orders.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_orders_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_orders_clean.csv')}")
 
 # 4. Clean geolocation dataset
 print("\n" + "="*80)
@@ -220,8 +227,8 @@ print(f"  Rows: {df_geolocation_clean.shape[0]:,}")
 print(f"  Duplicates removed: {removed_geo}")
 
 # Save cleaned dataset
-df_geolocation_clean.to_csv(os.path.join(PROCESSED_DATA_PATH, 'olist_geolocation_clean.csv'), index=False)
-print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_PATH, 'olist_geolocation_clean.csv')}")
+df_geolocation_clean.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_geolocation_clean.csv'), index=False)
+print(f"[OK] Saved: {os.path.join(PROCESSED_DATA_CLEANED_PATH, 'olist_geolocation_clean.csv')}")
 
 # 5. Copy other datasets (no cleaning needed)
 print("\n" + "="*80)
@@ -243,7 +250,7 @@ for name, filename in other_datasets.items():
     df = df.drop_duplicates()
     removed_other = before_other - len(df)
     output_filename = filename.replace('.csv', '_clean.csv')
-    df.to_csv(os.path.join(PROCESSED_DATA_PATH, output_filename), index=False)
+    df.to_csv(os.path.join(PROCESSED_DATA_CLEANED_PATH, output_filename), index=False)
     print(f"[OK] Copied {name} -> {output_filename} (removed {removed_other} duplicates)")
     if removed_other:
         report_entries.append({
@@ -267,7 +274,7 @@ cleaning_summary = [
         'Cleaned_Rows': df_reviews_clean.shape[0],
         'Cleaned_Columns': df_reviews_clean.shape[1],
         'Columns_Dropped': 0,
-        'Action': 'Filled 2 columns with "non renseigné"'
+        'Action': 'Filled 2 columns with "no comment"'
     },
     {
         'Dataset': 'products',
@@ -302,40 +309,43 @@ summary_df = pd.DataFrame(cleaning_summary)
 print("\nCleaning Summary:")
 print(summary_df.to_string(index=False))
 
-# Save summary
-# Ensure cleaning report directory exists and write summary there
+# Create combined cleaning report in text format
 cleaning_report_dir = os.path.join(REPORTS_PATH, 'cleaning')
 os.makedirs(cleaning_report_dir, exist_ok=True)
-summary_df.to_csv(os.path.join(cleaning_report_dir, 'cleaning_summary.csv'), index=False)
-print(f"\n[OK] Cleaning summary saved: {os.path.join(cleaning_report_dir, 'cleaning_summary.csv')}")
+report_path = os.path.join(cleaning_report_dir, f"cleaning_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.txt")
 
-# Final summary
-print("\n" + "="*80)
-print("CLEANING COMPLETE")
-print("="*80)
+with open(report_path, 'w', encoding='utf-8') as f:
+    # Write cleaning summary
+    f.write("="*80 + "\n")
+    f.write("CLEANING SUMMARY\n")
+    f.write("="*80 + "\n\n")
+    f.write(summary_df.to_string(index=False) + "\n\n")
+    
+    # Write detailed cleaning report
+    if report_entries:
+        f.write("="*80 + "\n")
+        f.write("DETAILED CLEANING REPORT\n")
+        f.write("="*80 + "\n\n")
+        report_df = pd.DataFrame(report_entries)
+        f.write(report_df.to_string(index=False) + "\n\n")
+    else:
+        f.write("No detailed cleaning actions to report.\n\n")
+    
+    # Write additional information
+    f.write("="*80 + "\n")
+    f.write("CLEANING COMPLETE\n")
+    f.write("="*80 + "\n\n")
+    f.write(f"Cleaned datasets saved to: {PROCESSED_DATA_CLEANED_PATH}\n\n")
+    f.write("Files created:\n")
+    for filename in os.listdir(PROCESSED_DATA_CLEANED_PATH):
+        if filename.endswith('_clean.csv'):
+            filepath = os.path.join(PROCESSED_DATA_CLEANED_PATH, filename)
+            df = pd.read_csv(filepath)
+            f.write(f"  - {filename}: {df.shape[0]:,} rows x {df.shape[1]} columns\n")
+    f.write(f"\nCleaning completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
+    f.write("Next Steps:\n")
+    f.write("  1. Validate cleaned datasets\n")
+    f.write("  2. Proceed with exploratory data analysis\n")
+    f.write("  3. Create visualizations and reports\n")
 
-print(f"\nCleaned datasets saved to: {PROCESSED_DATA_PATH}")
-print("\nFiles created:")
-for filename in os.listdir(PROCESSED_DATA_PATH):
-    if filename.endswith('_clean.csv'):
-        filepath = os.path.join(PROCESSED_DATA_PATH, filename)
-        df = pd.read_csv(filepath)
-        print(f"  - {filename}: {df.shape[0]:,} rows x {df.shape[1]} columns")
-
-print(f"\nCleaning completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-
-print("\nNext Steps:")
-print("  1. Validate cleaned datasets")
-print("  2. Proceed with exploratory data analysis")
-print("  3. Create visualizations and reports")
-
-# Write detailed cleaning report to reports/cleaning
-cleaning_report_dir = os.path.join(REPORTS_PATH, 'cleaning')
-os.makedirs(cleaning_report_dir, exist_ok=True)
-if report_entries:
-    report_df = pd.DataFrame(report_entries)
-    report_path = os.path.join(cleaning_report_dir, f"cleaning_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv")
-    report_df.to_csv(report_path, index=False)
-    print(f"[OK] Detailed cleaning report written to: {report_path}")
-else:
-    print("[OK] No detailed cleaning actions to report.")
+print(f"\n[OK] Combined cleaning report saved: {report_path}")
