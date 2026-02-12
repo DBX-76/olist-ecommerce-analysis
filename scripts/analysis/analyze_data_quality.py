@@ -33,7 +33,7 @@ os.makedirs(DATA_QUALITY_DIR, exist_ok=True)
 os.makedirs(CLEANING_DIR, exist_ok=True)
 
 # Output file
-OUTPUT_FILE = os.path.join(REPORTS_PATH, 'data_quality_analysis_report.txt')
+OUTPUT_FILE = os.path.join(DATA_QUALITY_DIR, 'data_quality_analysis_report.txt')
 
 # Clear existing file
 if os.path.exists(OUTPUT_FILE):
