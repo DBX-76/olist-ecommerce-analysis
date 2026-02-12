@@ -26,7 +26,7 @@ Projet/
 │   ├── 01_Exploratory_Data_Analysis.ipynb
 │   └── 02_Data_Quality_Analysis.ipynb
 ├── scripts/                    # Python scripts for data processing
-│   ├── core/                   # Core processing scripts
+│   ├── transform_csv_dataset/  # Core processing scripts (formerly core)
 │   │   ├── create_zip_code_reference.py    # Geographic reference creation
 │   │   ├── standardize_customers.py        # Customer standardization
 │   │   ├── enrich_customers_with_geolocation.py    # Customer enrichment
@@ -36,6 +36,9 @@ Projet/
 │   ├── analysis/               # Analysis scripts
 │   │   ├── analyze_data_quality.py         # Data quality analysis
 │   │   └── clean_data.py                 # Data cleaning
+│   ├── db/                     # Database scripts
+│   │   ├── init_db.py                      # Database initialization
+│   │   └── load_data.py                    # Data loading
 │   └── utils/                  # Utility scripts
 │       ├── organize_reports.py
 │       └── test_profiling.py
@@ -63,6 +66,8 @@ Projet/
 - Python 3.7+
 - Jupyter Notebook
 - Required libraries: pandas, numpy, matplotlib, seaborn, ydata-profiling
+- PostgreSQL database
+- psycopg2-binary (for PostgreSQL connection)
 
 ### Installation
 
@@ -75,20 +80,20 @@ pip install -r requirements.txt
 
 1. **Create geographic reference table**:
 ```bash
-python scripts/core/create_zip_code_reference.py
+python scripts/transform_csv_dataset/create_zip_code_reference.py
 ```
 
 2. **Standardize and enrich customer data**:
 ```bash
-python scripts/core/standardize_customers.py
-python scripts/core/enrich_customers_with_geolocation.py
+python scripts/transform_csv_dataset/standardize_customers.py
+python scripts/transform_csv_dataset/enrich_customers_with_geolocation.py
 ```
 
 3. **Detect and handle seller anomalies**:
 ```bash
-python scripts/core/detect_seller_anomalies.py
-python scripts/core/standardize_sellers.py
-python scripts/core/enrich_sellers_with_geolocation.py
+python scripts/transform_csv_dataset/detect_seller_anomalies.py
+python scripts/transform_csv_dataset/standardize_sellers.py
+python scripts/transform_csv_dataset/enrich_sellers_with_geolocation.py
 ```
 
 4. **Run comprehensive data quality analysis**:
@@ -101,7 +106,17 @@ python scripts/analysis/analyze_data_quality.py
 python scripts/analysis/clean_data.py
 ```
 
-6. **View the generated reports**:
+6. **Initialize the database**:
+```bash
+python scripts/db/init_db.py
+```
+
+7. **Load data into the database**:
+```bash
+python scripts/db/load_data.py
+```
+
+8. **View the generated reports**:
    - Open HTML files in [`reports/eda/`](reports/eda/) directory
    - Check anomaly detection reports in [`reports/anomaly_detection/`](reports/anomaly_detection/)
 
@@ -250,9 +265,14 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 - **`product_review_analysis/products_quality_analyzed.csv`**: Products with quality analysis and anomaly flags
 - **`product_review_analysis/reviews_quality_analyzed.csv`**: Reviews with quality analysis and anomaly flags
 
+### Database Files
+- **`scripts/db/init_db.py`**: Initializes the database schema
+- **`scripts/db/load_data.py`**: Loads processed data into the database
+
 ## Documentation
 
 - [Schéma de la base de données](docs/sql/schema.md)
+- [Guide d'analyse de la qualité des données](docs/Data_Quality_Analysis_Guide.md)
 
 ### Generated Reports
 - **Anomaly Detection Reports**: Detailed analysis of location inconsistencies
