@@ -12,6 +12,9 @@ PROCESSED_DATA_PATH = config['paths']['processed_data']
 PROCESSED_DATA_CLEANED_PATH = os.path.join(PROCESSED_DATA_PATH, 'cleaned')
 REPORTS_PATH = config['paths']['reports']
 
+# Create directories if they don't exist
+os.makedirs(PROCESSED_DATA_CLEANED_PATH, exist_ok=True)
+
 # Load raw datasets
 print("Loading raw datasets...")
 df_reviews = pd.read_csv(os.path.join(RAW_DATA_PATH, 'olist_order_reviews_dataset.csv'))
