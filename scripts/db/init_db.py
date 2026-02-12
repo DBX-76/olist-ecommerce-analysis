@@ -48,26 +48,54 @@ def create_tables():
     db_url = get_database_url()
     engine = create_engine(db_url)
 
+    # Supprimer les tables existantes en respectant l'ordre des dépendances
+    drop_queries = [
+        "DROP TABLE IF EXISTS reviews CASCADE;",
+        "DROP TABLE IF EXISTS payments CASCADE;",
+        "DROP TABLE IF EXISTS order_items CASCADE;",
+        "DROP TABLE IF EXISTS orders CASCADE;",
+        "DROP TABLE IF EXISTS products CASCADE;",
+        "DROP TABLE IF EXISTS sellers CASCADE;",
+        "DROP TABLE IF EXISTS customers CASCADE;"
+    ]
+
     queries = [
         """
-        CREATE TABLE IF NOT EXISTS customers (
+        CREATE TABLE customers (
             customer_id VARCHAR(50) PRIMARY KEY,
             customer_unique_id VARCHAR(50),
             customer_zip_code_prefix INT,
-            customer_city VARCHAR(100),
+            original_city_name VARCHAR(100),
+            standardized_city_name VARCHAR(100),
             customer_state VARCHAR(2),
-            geolocation_lat DECIMAL(9, 6),
-            geolocation_lng DECIMAL(9, 6)
+            city_name_standardized VARCHAR(100),
+            avg_latitude DECIMAL(9, 6),
+            avg_longitude DECIMAL(9, 6),
+            geo_coordinate_samples INT,
+            geo_data_quality VARCHAR(50),
+            lat_spread_km DECIMAL(9, 2),
+            lon_spread_km DECIMAL(9, 2)
         );
         """,
         """
-        CREATE TABLE IF NOT EXISTS sellers (
+        CREATE TABLE sellers (
             seller_id VARCHAR(50) PRIMARY KEY,
             seller_zip_code_prefix INT,
-            seller_city VARCHAR(100),
+            original_city_name VARCHAR(100),
+            standardized_city_name VARCHAR(100),
             seller_state VARCHAR(2),
-            geolocation_lat DECIMAL(9, 6),
-            geolocation_lng DECIMAL(9, 6)
+            was_standardized BOOLEAN,
+            anomaly_numeric_city BOOLEAN,
+            anomaly_contains_slashes BOOLEAN,
+            anomaly_contains_commas BOOLEAN,
+            anomaly_contains_brasil BOOLEAN,
+            anomaly_too_short BOOLEAN,
+            avg_latitude DECIMAL(9, 6),
+            avg_longitude DECIMAL(9, 6),
+            geo_coordinate_samples INT,
+            geo_data_quality VARCHAR(50),
+            lat_spread_km DECIMAL(9, 2),
+            lon_spread_km DECIMAL(9, 2)
         );
         """,
         """
@@ -93,8 +121,8 @@ def create_tables():
             order_approved_at TIMESTAMP,
             order_delivered_carrier_date TIMESTAMP,
             order_delivered_customer_date TIMESTAMP,
-            order_estimated_delivery_date TIMESTAMP,
-            FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
+            order_estimated_delivery_date TIMESTAMP
+            -- FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
         );
         """,
         """
@@ -106,10 +134,10 @@ def create_tables():
             shipping_limit_date TIMESTAMP,
             price DECIMAL(10, 2),
             freight_value DECIMAL(10, 2),
-            PRIMARY KEY (order_id, order_item_id),
-            FOREIGN KEY (order_id) REFERENCES orders(order_id),
-            FOREIGN KEY (product_id) REFERENCES products(product_id),
-            FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
+            PRIMARY KEY (order_id, order_item_id)
+            -- FOREIGN KEY (order_id) REFERENCES orders(order_id),
+            -- FOREIGN KEY (product_id) REFERENCES products(product_id),
+            -- FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
         );
         """,
         """
@@ -118,8 +146,8 @@ def create_tables():
             payment_sequential INT,
             payment_type VARCHAR(20),
             payment_installments INT,
-            payment_value DECIMAL(10, 2),
-            FOREIGN KEY (order_id) REFERENCES orders(order_id)
+            payment_value DECIMAL(10, 2)
+            -- FOREIGN KEY (order_id) REFERENCES orders(order_id)
         );
         """,
         """
@@ -130,15 +158,21 @@ def create_tables():
             review_comment_title TEXT,
             review_comment_message TEXT,
             review_creation_date TIMESTAMP,
-            review_answer_timestamp TIMESTAMP,
-            FOREIGN KEY (order_id) REFERENCES orders(order_id)
+            review_answer_timestamp TIMESTAMP
+            -- FOREIGN KEY (order_id) REFERENCES orders(order_id)
         );
         """
     ]
     
     with engine.connect() as conn:
+        # Supprimer les tables existantes
+        for query in drop_queries:
+            conn.execute(text(query))
+        
+        # Créer les nouvelles tables
         for query in queries:
             conn.execute(text(query))
+        
         conn.commit()
 
     print("Tables créées avec succès dans PostgreSQL.")
