@@ -68,8 +68,21 @@ Thumbs.db
 
 # Environment variables
 .env
+<<<<<<< HEAD
+.env.localdata/processed/*
+!data/processed/.gitkeep
+!data/processed/cleaned/
+data/processed/cleaned/*
+!data/processed/cleaned/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+!data/processed/cleaned/
+data/processed/cleaned/*
+!data/processed/cleaned/.gitkeep
+=======
 .env.localdata/processed/
 data/processed/
+>>>>>>> 89fe5bdf6045491022c1150050953b92d3d2b53b
 reports/
 
 # Fichiers non pertinents
