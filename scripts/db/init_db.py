@@ -15,9 +15,14 @@ def get_database_url():
     db_password = os.getenv('DB_PASSWORD')
     
     if all([db_host, db_port, db_name, db_user, db_password]):
-        return f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+        url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+        
+        # Ajoute sslmode=require si on est sur Neon (pas en local)
+        if db_host != 'localhost':
+            url += "?sslmode=require"
+        
+        return url
     
-    # Si les variables d'environnement ne sont pas toutes définies, lever une erreur
     raise ValueError("Les variables d'environnement pour la connexion à la base de données ne sont pas toutes définies. Veuillez vérifier votre fichier .env")
 
 def test_connection():
