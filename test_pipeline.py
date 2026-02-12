@@ -18,7 +18,7 @@ def test_pipeline():
     # Vérifier que les répertoires nécessaires existent
     required_dirs = [
         "data/processed",
-        "scripts/core",
+        "scripts/transform_csv_dataset",
         "reports/anomaly_detection"
     ]
     
@@ -53,9 +53,9 @@ def test_pipeline():
     
     # Vérifier que les scripts principaux existent
     core_scripts = [
-        "scripts/core/create_zip_code_reference.py",
-        "scripts/core/detect_clean_financial_anomalies.py",
-        "scripts/core/analyze_clean_products_reviews.py"
+        "scripts/transform_csv_dataset/create_zip_code_reference.py",
+        "scripts/transform_csv_dataset/detect_clean_financial_anomalies.py",
+        "scripts/transform_csv_dataset/analyze_clean_products_reviews.py"
     ]
     
     print("\n3. Verification des scripts principaux...")
@@ -82,7 +82,7 @@ def test_pipeline():
     print("="*60)
     print("\nInstructions:")
     print("- Si des fichiers sont manquants, exécutez les scripts correspondants")
-    print("- Les scripts principaux sont dans le répertoire scripts/core/")
+    print("- Les scripts principaux sont dans le répertoire scripts/transform_csv_dataset/")
     print("- Les rapports sont générés dans le répertoire reports/")
     print("- Les données traitées sont dans le répertoire data/processed/")
     
