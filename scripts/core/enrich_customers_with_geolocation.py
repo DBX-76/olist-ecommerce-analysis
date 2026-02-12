@@ -124,9 +124,18 @@ def enrich_customers_with_geolocation():
     # Sauvegarder le rapport de validation
     customers_report_dir = os.path.join(REPORTS_PATH, 'customers')
     os.makedirs(customers_report_dir, exist_ok=True)
-    report_path = os.path.join(customers_report_dir, 'customers_geolocation_enrichment_report.csv')
-    report_df = pd.DataFrame([validation_report])
-    report_df.to_csv(report_path, index=False)
+    report_path = os.path.join(customers_report_dir, 'customers_geolocation_enrichment_report.txt')
+    
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write("RAPPORT D'ENRICHISSEMENT GÉOLOCALISATION CLIENTS\n")
+        f.write("="*80 + "\n\n")
+        for key, value in validation_report.items():
+            # Formater les clés pour une meilleure lisibilité
+            formatted_key = key.replace('_', ' ').capitalize()
+            if isinstance(value, float):
+                f.write(f"{formatted_key}: {value:.2f}\n")
+            else:
+                f.write(f"{formatted_key}: {value:,}\n")
     print(f"[OK] Rapport d'enrichissement sauvegardé: {report_path}")
     
     print(f"\nProcessus d'enrichissement terminé avec succès!")
