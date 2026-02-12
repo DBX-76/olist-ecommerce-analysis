@@ -49,7 +49,7 @@ jobs:
         run: mkdir -p data/processed
       
       - name: Init database
-        run: python scripts/init_db.py
+        run: python scripts/db/init_db.py
       
       - name: Run pipeline
         run: python run_pipeline.py
