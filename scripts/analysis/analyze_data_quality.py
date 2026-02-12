@@ -416,3 +416,88 @@ print_and_write(summary_df.to_string(index=False))
 print_and_write("\n" + "="*80)
 print_and_write("6. DATA CLEANING RECOMMENDATIONS")
 print_and_write("="*80)
+
+recommendations = []
+
+for name, df in data.items():
+    # Check for missing values
+    for col in df.columns:
+        missing_count = df[col].isnull().sum()
+        if missing_count > 0:
+            missing_pct = round((missing_count / df.shape[0]) * 100, 2)
+            
+            if missing_pct > 50:
+                action = "DROP COLUMN - Too many missing values"
+                priority = "HIGH"
+            elif missing_pct > 20:
+                action = "IMPUTE or DROP ROWS - Consider imputation or removal"
+                priority = "HIGH"
+            elif missing_pct > 5:
+                action = "IMPUTE - Consider mean/median/forward-fill"
+                priority = "MEDIUM"
+            else:
+                action = "IMPUTE - Low impact imputation"
+                priority = "LOW"
+            
+            recommendations.append({
+                'Dataset': name,
+                'Column': col,
+                'Missing_Percentage': missing_pct,
+                'Action': action,
+                'Priority': priority
+            })
+
+    # Check for duplicates
+    dup_count = df.duplicated().sum()
+    if dup_count > 0:
+        recommendations.append({
+            'Dataset': name,
+            'Column': 'Full Row',
+            'Missing_Percentage': 0,
+            'Action': f"REMOVE DUPLICATES - {dup_count} rows",
+            'Priority': "MEDIUM"
+        })
+
+    # Check for outliers in numerical columns
+    numeric_cols = df.select_dtypes(include=[np.number]).columns
+    for col in numeric_cols:
+        if df[col].notna().sum() > 0:
+            Q1 = df[col].quantile(0.25)
+            Q3 = df[col].quantile(0.75)
+            IQR = Q3 - Q1
+            
+            lower_bound = Q1 - 1.5 * IQR
+            upper_bound = Q3 + 1.5 * IQR
+            
+            outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)][col]
+            outlier_count = len(outliers)
+            outlier_pct = round((outlier_count / df[col].notna().sum()) * 100, 2)
+            
+            if outlier_pct > 5:
+                recommendations.append({
+                    'Dataset': name,
+                    'Column': col,
+                    'Missing_Percentage': 0,
+                    'Action': f"TREAT OUTLIERS - {outlier_pct}% outliers using IQR method",
+                    'Priority': "MEDIUM"
+                })
+
+# Generate recommendations report
+if recommendations:
+    rec_df = pd.DataFrame(recommendations)
+    priority_order = {'HIGH': 0, 'MEDIUM': 1, 'LOW': 2}
+    rec_df['Priority_Order'] = rec_df['Priority'].map(priority_order)
+    rec_df = rec_df.sort_values(['Priority_Order', 'Missing_Percentage'], ascending=[True, False])
+    rec_df = rec_df.drop('Priority_Order', axis=1)
+    
+    print_and_write("\nRecommended Actions:")
+    print_and_write(rec_df.to_string(index=False))
+else:
+    print_and_write("\nNo cleaning recommendations needed - all data is clean!")
+
+# Final summary
+print_and_write("\n" + "="*80)
+print_and_write("ANALYSIS COMPLETE")
+print_and_write("="*80)
+print_and_write(f"Analysis completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+print_and_write(f"\nGenerated report: {OUTPUT_FILE}")
