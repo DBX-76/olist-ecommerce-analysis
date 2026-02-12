@@ -22,12 +22,12 @@ def test_pipeline():
         "reports/anomaly_detection"
     ]
     
-    print("1. Vérification des répertoires...")
+    print("1. Verification des repertoires...")
     for dir_path in required_dirs:
         if os.path.exists(dir_path):
-            print(f"   ✅ {dir_path}")
+            print(f"   OK {dir_path}")
         else:
-            print(f"   ❌ {dir_path} - NON TROUVÉ")
+            print(f"   ERREUR {dir_path} - NON TROUVE")
             return False
     
     # Vérifier que les fichiers de sortie principaux existent
@@ -39,17 +39,17 @@ def test_pipeline():
         "reports/anomaly_detection/financial_anomaly_report.csv"
     ]
     
-    print("\n2. Vérification des fichiers de sortie...")
+    print("\n2. Verification des fichiers de sortie...")
     missing_files = []
     for file_path in expected_files:
         if os.path.exists(file_path):
-            print(f"   ✅ {file_path}")
+            print(f"   OK {file_path}")
         else:
-            print(f"   ❌ {file_path} - MANQUANT")
+            print(f"   ERREUR {file_path} - MANQUANT")
             missing_files.append(file_path)
     
     if missing_files:
-        print(f"\n   ⚠️  {len(missing_files)} fichiers manquants. Le pipeline n'est peut-être pas complètement exécuté.")
+        print(f"\n   WARNING {len(missing_files)} fichiers manquants. Le pipeline n'est peut-etre pas completement execute.")
     
     # Vérifier que les scripts principaux existent
     core_scripts = [
@@ -58,24 +58,24 @@ def test_pipeline():
         "scripts/core/analyze_clean_products_reviews.py"
     ]
     
-    print("\n3. Vérification des scripts principaux...")
+    print("\n3. Verification des scripts principaux...")
     for script in core_scripts:
         if os.path.exists(script):
-            print(f"   ✅ {script}")
+            print(f"   OK {script}")
         else:
-            print(f"   ❌ {script} - MANQUANT")
+            print(f"   ERREUR {script} - MANQUANT")
     
     # Tester la lecture d'un fichier de sortie pour vérifier qu'il est valide
     print("\n4. Test de lecture d'un fichier de sortie...")
     try:
         if os.path.exists("data/processed/zip_code_reference.csv"):
             df_test = pd.read_csv("data/processed/zip_code_reference.csv")
-            print(f"   ✅ Lecture réussie: {len(df_test)} lignes, {len(df_test.columns)} colonnes")
+            print(f"   OK Lecture reussie: {len(df_test)} lignes, {len(df_test.columns)} colonnes")
             print(f"      Colonnes: {list(df_test.columns)[:5]}{'...' if len(df_test.columns) > 5 else ''}")
         else:
-            print("   ❌ Impossible de lire le fichier de test")
+            print("   ERREUR Impossible de lire le fichier de test")
     except Exception as e:
-        print(f"   ❌ Erreur lors de la lecture: {str(e)}")
+        print(f"   ERREUR Erreur lors de la lecture: {str(e)}")
     
     print("\n" + "="*60)
     print("TEST TERMINÉ")
