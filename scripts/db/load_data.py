@@ -48,17 +48,18 @@ def load_data_to_db():
 
     # Chargement des CSV
     df_customers = pd.read_csv('data/processed/customers_with_geolocation.csv')
-    df_orders = pd.read_csv('data/processed/olist_orders_clean.csv')
-    df_payments = pd.read_csv('data/processed/olist_order_payments_dataset_clean.csv')
-    df_products = pd.read_csv('data/processed/products_with_translations.csv')
-    df_reviews = pd.read_csv('data/processed/olist_order_reviews_clean.csv').drop_duplicates(subset=['review_id'])
+    df_orders = pd.read_csv('data/processed/advanced_cleaning/orders_advanced_cleaned.csv')
+    df_payments = pd.read_csv('data/processed/advanced_cleaning/order_payments_advanced_cleaned.csv')
+    df_products = pd.read_csv('data/processed/cleaned/products_with_translations.csv')
+    df_reviews = pd.read_csv('data/processed/cleaned/olist_order_reviews_clean.csv').drop_duplicates(subset=['review_id'])
     df_sellers = pd.read_csv('data/processed/sellers_with_geolocation.csv')
+    df_order_items = pd.read_csv('data/processed/financial_analysis/order_items_clean.csv')
     # Convertir les colonnes de type entier (0/1) en boolean
     boolean_columns = ['was_standardized', 'anomaly_numeric_city', 'anomaly_contains_slashes', 
                       'anomaly_contains_commas', 'anomaly_contains_brasil', 'anomaly_too_short']
     for col in boolean_columns:
         df_sellers[col] = df_sellers[col].astype(bool)
-    df_order_items = pd.read_csv('data/processed/olist_order_items_dataset_clean.csv')
+    df_order_items = pd.read_csv('data/processed/advanced_cleaning/order_items_advanced_cleaned.csv')
 
     # Insertion dans les tables (remplacer le contenu)
     df_customers.to_sql('customers', engine, if_exists='append', index=False)

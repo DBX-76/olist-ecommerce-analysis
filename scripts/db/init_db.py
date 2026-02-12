@@ -103,8 +103,8 @@ def create_tables():
             product_id VARCHAR(50) PRIMARY KEY,
             product_category_name VARCHAR(100),
             product_category_name_english VARCHAR(100),
-            product_name_lenght INT,
-            product_description_lenght INT,
+            product_name_length INT,
+            product_description_length INT,
             product_photos_qty INT,
             product_weight_g INT,
             product_length_cm INT,
@@ -121,7 +121,10 @@ def create_tables():
             order_approved_at TIMESTAMP,
             order_delivered_carrier_date TIMESTAMP,
             order_delivered_customer_date TIMESTAMP,
-            order_estimated_delivery_date TIMESTAMP
+            order_estimated_delivery_date TIMESTAMP,
+            is_gift_order BOOLEAN,
+            gift_reason TEXT,
+            has_fragmented_vouchers BOOLEAN
             -- FOREIGN KEY (customer_id) REFERENCES customers(customer_id)
         );
         """,
@@ -134,6 +137,8 @@ def create_tables():
             shipping_limit_date TIMESTAMP,
             price DECIMAL(10, 2),
             freight_value DECIMAL(10, 2),
+            icms_value DECIMAL(10, 2),
+            is_gift_item BOOLEAN,
             PRIMARY KEY (order_id, order_item_id)
             -- FOREIGN KEY (order_id) REFERENCES orders(order_id),
             -- FOREIGN KEY (product_id) REFERENCES products(product_id),
@@ -146,7 +151,10 @@ def create_tables():
             payment_sequential INT,
             payment_type VARCHAR(20),
             payment_installments INT,
-            payment_value DECIMAL(10, 2)
+            payment_value DECIMAL(10, 2),
+            is_free_voucher BOOLEAN,
+            anomaly_zero_amount BOOLEAN,
+            anomaly_zero_installments BOOLEAN
             -- FOREIGN KEY (order_id) REFERENCES orders(order_id)
         );
         """,
