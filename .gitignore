@@ -24,6 +24,7 @@ wheels/
 *.ipynb
 
 # Virtual Environment
+.venv/
 venv/
 env/
 ENV/

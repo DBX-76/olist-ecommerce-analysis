@@ -174,7 +174,7 @@ def detect_seller_anomalies():
     report_path = os.path.join(sellers_report_dir, 'sellers_anomalies_detection_report.txt')
     
     with open(report_path, 'w', encoding='utf-8') as f:
-        f.write("RAPPORT DE DÉTECTION D'ANOMALIES VENDEURS\n")
+        f.write("RAPPORT DE DETECTION D'ANOMALIES VENDEURS\n")
         f.write("="*80 + "\n\n")
         for key, value in validation_report.items():
             # Formater les clés pour une meilleure lisibilité

@@ -195,27 +195,26 @@ def create_zip_code_reference():
     # Sauvegarder un rapport
     zip_report_dir = os.path.join(REPORTS_PATH, 'zip_code_reference')
     os.makedirs(zip_report_dir, exist_ok=True)
-    report_path = os.path.join(zip_report_dir, 'zip_code_reference_report.csv')
-    report_data = {
-        'metric': [
-            'total_zip_prefixes',
-            'total_states',
-            'high_quality_records',
-            'medium_quality_records', 
-            'low_quality_records',
-            'total_records'
-        ],
-        'value': [
-            zip_code_ref['zip_code_prefix'].nunique(),
-            zip_code_ref['state'].nunique(),
-            len(zip_code_ref[zip_code_ref['data_quality'] == 'High']),
-            len(zip_code_ref[zip_code_ref['data_quality'] == 'Medium']),
-            len(zip_code_ref[zip_code_ref['data_quality'] == 'Low']),
-            len(zip_code_ref)
-        ]
-    }
-    report_df = pd.DataFrame(report_data)
-    report_df.to_csv(report_path, index=False)
+    report_path = os.path.join(zip_report_dir, 'zip_code_reference_report.txt')
+    
+    with open(report_path, 'w', encoding='utf-8') as f:
+        f.write("RAPPORT DE RÉFÉRENCE GÉOGRAPHIQUE (ZIP CODE REFERENCE)\n")
+        f.write("="*80 + "\n\n")
+        
+        # Statistiques principales
+        f.write("Statistiques de la table de référence:\n")
+        f.write("-"*50 + "\n")
+        f.write(f"Nombre total de préfixes ZIP: {zip_code_ref['zip_code_prefix'].nunique():,}\n")
+        f.write(f"Nombre total d'états couverts: {zip_code_ref['state'].nunique():,}\n")
+        f.write("Qualité des données:\n")
+        data_quality_counts = zip_code_ref['data_quality'].value_counts()
+        for quality, count in data_quality_counts.items():
+            percentage = (count / len(zip_code_ref)) * 100
+            f.write(f"  - {quality}: {count:,} ({percentage:.1f}%)\n")
+        
+        # Calculer le nombre total de records
+        total_records = len(zip_code_ref)
+        f.write(f"Total records: {total_records:,}\n")
     print(f"[OK] Rapport sauvegardé: {report_path}")
     
     print(f"\nProcessus terminé avec succès!")
