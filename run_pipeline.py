@@ -56,6 +56,9 @@ def main():
         "scripts/db/init_db.py",       
         "scripts/db/load_data.py",     
         "scripts/analysis/analyze_data_quality.py",
+        "scripts/cte/get_customer_payment_rank.py",
+        "scripts/cte/get_order_and_customer_payment_details.py",
+        "scripts/cte/get_customer_order_interval.py",
         "test_pipeline.py",
     ]
 
