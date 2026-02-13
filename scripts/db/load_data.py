@@ -59,7 +59,7 @@ def load_data_to_db():
     df_products = pd.read_csv('data/processed/cleaned/products_with_translations.csv')
     df_reviews = pd.read_csv('data/processed/cleaned/olist_order_reviews_clean.csv').drop_duplicates(subset=['review_id'])
     df_sellers = pd.read_csv('data/processed/sellers_with_geolocation.csv')
-    df_order_items = pd.read_csv('data/processed/financial_analysis/order_items_clean.csv')
+  #  df_order_items = pd.read_csv('data/processed/financial_analysis/order_items_clean.csv')
     # Convertir les colonnes de type entier (0/1) en boolean
     boolean_columns = ['was_standardized', 'anomaly_numeric_city', 'anomaly_contains_slashes', 
                       'anomaly_contains_commas', 'anomaly_contains_brasil', 'anomaly_too_short']
