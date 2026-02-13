@@ -8,6 +8,12 @@ load_dotenv()
 
 def get_database_url():
     """Retourne l'URL de connexion à la base de données PostgreSQL depuis les variables d'environnement"""
+    # First check for complete DATABASE_URL (Neon format)
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        return database_url
+    
+    # Fallback to individual parameters
     db_host = os.getenv('DB_HOST', 'localhost')
     db_port = os.getenv('DB_PORT', '5432')
     db_name = os.getenv('DB_NAME')

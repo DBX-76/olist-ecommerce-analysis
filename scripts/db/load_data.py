@@ -12,19 +12,25 @@ load_dotenv()
 
 def get_database_url():
     """Retourne l'URL de connexion à la base de données PostgreSQL depuis les variables d'environnement"""
+    # First check for complete DATABASE_URL (Neon format)
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        return database_url
+    
+    # Fallback to individual parameters
     db_host = os.getenv('DB_HOST', 'localhost')
     db_port = os.getenv('DB_PORT', '5432')
-    db_name = os.getenv('DB_NAME', 'olist_db')
-    db_user = os.getenv('DB_USER', 'postgres')
-    db_password = os.getenv('DB_PASSWORD', 'Padmee.P.76*')
+    db_name = os.getenv('DB_NAME')
+    db_user = os.getenv('DB_USER')
+    db_password = os.getenv('DB_PASSWORD')
     
-    url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-    
-    # Ajoute sslmode=require si on est sur Neon (pas en local)
-    if db_host != 'localhost':
-        url += "?sslmode=require"
-    
-    return url
+    if all([db_host, db_port, db_name, db_user, db_password]):
+        url = f"postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
+        
+        # Ajoute sslmode=require si on est sur Neon (pas en local)
+        if db_host != 'localhost':
+            url += "?sslmode=require"
+        return url
 
 def load_data_to_db():
     # Connexion à la base de données
