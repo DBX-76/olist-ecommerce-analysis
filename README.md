@@ -38,6 +38,29 @@ python run_pipeline.py
   streamlit run analytics/streamlit_dashboard.py
   ```
 
+## Base de données PostgreSQL (Neon)
+
+Les données sont disponibles en ligne sur Neon PostgreSQL — aucune installation requise.
+
+**Connexion via psql :**
+```bash
+psql 'postgresql://readonly_user:Readonly%402026!@ep-round-surf-abmmxjp9-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require'
+```
+
+**Tables disponibles :**
+```sql
+\dt
+```
+
+**Exemple de requête à tester :**
+```sql
+-- Classement des clients par montant total payé
+SELECT * FROM v_customer_payment_ranking LIMIT 10;
+```
+
+> 💡 Compte en lecture seule — consultation uniquement
+ (cette partie était pour tester une instance BDD en ligne, tous les TD n'ont pas été réalisé dessus) 
+
 ## 📁 Structure du projet
 
 ```
