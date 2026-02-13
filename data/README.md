@@ -1,15 +1,29 @@
-# Data Directory
+# Dossier de données
 
-## Raw Data
-The raw data files are not included in this repository due to size limitations.
-To obtain the raw Brazilian e-commerce dataset:
-1. Download from the official source
-2. Place in the `data/raw/` directory
-3. Follow the structure described in the project documentation
+## Données brutes
 
-## Processed Data
-Processed and cleaned datasets are included in this repository for reproducibility:
-- `data/processed/` contains standardized and enriched data
-- `data/processed/financial_analysis/` contains cleaned financial records
-- `data/processed/advanced_cleaning/` contains advanced cleaning results
-- `data/processed/product_review_analysis/` contains analyzed product and review data
+Les fichiers de données brutes ne sont pas inclus dans ce repository (taille trop importante).
+
+### Comment obtenir les données ?
+
+1. **Télécharger le jeu de données** :
+   - Source officielle : [Kaggle - Brazilian E-Commerce Public Dataset by Olist](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce)
+   - Format : 9 fichiers CSV compressés
+
+2. **Placer les fichiers** :
+   - Décompressez les fichiers
+   - Placez-les dans le dossier `data/raw/`
+
+### Fichiers attendus dans `data/raw/`
+
+```
+olist_customers_dataset.csv
+olist_geolocation_dataset.csv
+olist_order_items_dataset.csv
+olist_order_payments_dataset.csv
+olist_order_reviews_dataset.csv
+olist_orders_dataset.csv
+olist_products_dataset.csv
+olist_sellers_dataset.csv
+product_category_name_translation.csv
+```

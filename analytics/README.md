@@ -1,30 +1,30 @@
-# E-commerce Analytics Module
+# Module d'analyse e-commerce
 
-This module provides comprehensive analytics for the Olist e-commerce dataset, focusing on key business metrics and performance indicators.
+Ce module fournit une analyse complète du dataset e-commerce Olist, axée sur les indicateurs clés de performance (KPIs) et les métriques business.
 
-## 📊 Available Analytics
+## 📊 Analyses disponibles
 
-### 💰 Sales Metrics
-- Daily, monthly, and yearly revenue trends
-- Year-over-year growth analysis
-- Top 10 performing products
-- Revenue forecasting
+### 💰 Métriques de ventes
+- Tendances quotidiennes, mensuelles et annuelles des revenus
+- Analyse de croissance YoY (année sur année)
+- Top 10 produits les plus performants
+- Prévisions de revenus
 
-### 👥 Customer Metrics
-- New vs returning customer analysis
-- Average cart value
-- Conversion rate tracking
-- RFM (Recency, Frequency, Monetary) analysis
+### 👥 Métriques clients
+- Analyse nouveaux vs clients fidèles
+- Valeur moyenne du panier
+- Suivi du taux de conversion
+- Analyse RFM (Récence, Fréquence, Montant)
 
-### 📊 Cohort Analysis
-- Customer retention by acquisition month
-- Lifetime Value (LTV) by cohort
-- Cohort-based performance tracking
+### 📊 Analyse de cohortes
+- Retention des clients par mois d'acquisition
+- Valeur vie client (LTV) par cohorte
+- Suivi de performance basé sur les cohortes
 
-## 🛠️ Setup
+## 🛠️ Configuration
 
-### Prerequisites
-- PostgreSQL database with the Olist dataset loaded
+### Prérequis
+- Base de données PostgreSQL avec le dataset Olist chargé
 - Python 3.7+
 
 ### Installation
@@ -32,92 +32,91 @@ This module provides comprehensive analytics for the Olist e-commerce dataset, f
 pip install -r requirements.txt
 ```
 
-## 🚀 Usage
+## 🚀 Utilisation
 
-### 1. Generate Static Dashboards
+### 1. Générer des dashboards statiques
 ```bash
 python analytics/generate_dashboards.py
 ```
-This creates interactive HTML dashboards in the `reports/` directory:
+Crée des dashboards HTML interactifs dans le dossier `reports/` :
 - `reports/sales_dashboard.html`
 - `reports/customer_dashboard.html`
 - `reports/cohort_dashboard.html`
 
-### 2. Run Performance Tests
+### 2. Lancer les tests de performance
 ```bash
 python analytics/performance_test.py
 ```
-This analyzes query performance before and after optimization, creating an index strategy for improved performance.
+Analyse les performances des requêtes avant/après optimisation, créant une stratégie d'indexation.
 
-### 3. Interactive Streamlit Dashboard
+### 3. Dashboard interactif Streamlit
 ```bash
 streamlit run analytics/streamlit_dashboard.py
 ```
-This launches an interactive web-based dashboard with real-time data from the database.
+Lance un dashboard web interactif avec des données en temps réel depuis la base de données.
 
-## 📋 Query Descriptions
+## 📋 Requêtes SQL optimisées
 
-### Optimized SQL Queries
-The `kpi_queries.sql` file contains optimized queries for all requested KPIs:
+Le fichier `kpi_queries.sql` contient des requêtes optimisées pour tous les KPIs :
 
-1. **Revenue Analysis**: Daily, monthly, and yearly revenue with YoY comparisons
-2. **Product Performance**: Top 10 products by revenue and order count
-3. **Customer Segmentation**: New vs returning customer analysis
-4. **RFM Analysis**: Customer segmentation based on Recency, Frequency, and Monetary value
-5. **Cohort Analysis**: Retention rates and LTV by acquisition cohort
+1. **Analyse des revenus** : Jour, mois, année avec comparaisons YoY
+2. **Performance des produits** : Top 10 produits par revenu et nombre de commandes
+3. **Segmentation des clients** : Nouveaux vs clients fidèles
+4. **Analyse RFM** : Segmentation basée sur récence, fréquence, montant
+5. **Analyse de cohortes** : Taux de rétention et LTV par cohorte
 
-### Performance Optimization
-- Strategic indexing on key columns
-- Efficient JOIN operations
-- Proper use of CTEs and window functions
-- Query execution time measurement and reporting
+### Optimisation des performances
+- Indexation stratégique sur les colonnes clés
+- JOINs performants
+- Utilisation de CTEs et fenêtres de fonctions
+- Mesure et reporting des temps d'exécution
 
-## 📊 Dashboard Features
+## 📊 Fonctionnalités des dashboards
 
 ### Sales Dashboard
-- Revenue trends over time
-- Monthly and yearly performance
-- Top-performing product categories
-- Growth rate analysis
+- Tendances des revenus au fil du temps
+- Performance mensuelle et annuelle
+- Catégories de produits les plus performantes
+- Analyse du taux de croissance
 
 ### Customer Dashboard
-- Customer acquisition and retention
-- Average cart value tracking
-- Conversion rate monitoring
-- RFM customer segmentation
+- Acquisition et rétention des clients
+- Suivi de la valeur moyenne du panier
+- Monitoring du taux de conversion
+- Segmentation RFM des clients
 
 ### Cohort Dashboard
-- Retention matrix visualization
-- LTV by customer acquisition cohort
-- Cohort performance tracking
+- Visualisation de la matrice de rétention
+- LTV par cohorte d'acquisition
+- Suivi de performance des cohortes
 
-## 📈 Key Performance Indicators
+## 📈 Indicators clés de performance
 
-### Sales KPIs
-- Total revenue (daily/monthly/yearly)
-- Revenue growth (MoM/YoY)
-- Top performing products
-- Average order value
+### KPIs de ventes
+- Revenu total (jour/mois/année)
+- Croissance des revenus (MoM/YoY)
+- Meilleurs produits
+- Valeur moyenne des commandes
 
-### Customer KPIs
-- New vs returning customer ratio
-- Customer acquisition cost
-- Average cart value
-- Conversion rate
+### KPIs clients
+- Ratio nouveaux vs clients fidèles
+- Coût d'acquisition client
+- Valeur moyenne du panier
+- Taux de conversion
 
-### Cohort KPIs
-- Customer retention rate
-- Customer lifetime value (LTV)
-- Cohort performance tracking
-- Churn rate analysis
+### KPIs de cohortes
+- Taux de rétention des clients
+- Valeur vie client (LTV)
+- Suivi de performance des cohortes
+- Analyse du churn rate
 
-## 🤝 Contributing
+## 🤝 Contribution
 
-1. Create optimized queries in `kpi_queries.sql`
-2. Add visualization functions to `generate_dashboards.py`
-3. Test performance improvements with `performance_test.py`
-4. Update the Streamlit dashboard as needed
+1. Créez des requêtes optimisées dans `kpi_queries.sql`
+2. Ajoutez des fonctions de visualisation dans `generate_dashboards.py`
+3. Testez les améliorations de performance avec `performance_test.py`
+4. Mettez à jour le dashboard Streamlit
 
-## 📄 License
+## 📄 Licence
 
-This project is part of the Olist e-commerce analysis project.
+Ce projet fait partie de l'analyse e-commerce Olist.
