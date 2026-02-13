@@ -48,9 +48,6 @@ jobs:
       - name: Create processed data directory
         run: mkdir -p data/processed
       
-      - name: Init database
-        run: python scripts/db/init_db.py
-      
       - name: Run pipeline
         run: python run_pipeline.py
 

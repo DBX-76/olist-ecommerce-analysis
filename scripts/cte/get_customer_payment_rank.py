@@ -101,7 +101,7 @@ if __name__ == "__main__":
     
     # Sauvegarder dans un fichier CSV
     if customer_rank_df is not None:
-        output_dir = 'reports'
+        output_dir = 'reports/cte'
         os.makedirs(output_dir, exist_ok=True)
         output_path = os.path.join(output_dir, 'customer_payment_rank.csv')
         save_to_csv(customer_rank_df, output_path)

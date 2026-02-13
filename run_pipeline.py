@@ -51,7 +51,9 @@ def main():
         "scripts/transform_csv_dataset/detect_seller_anomalies.py",
         "scripts/transform_csv_dataset/standardize_sellers.py",
         "scripts/transform_csv_dataset/enrich_sellers_with_geolocation.py",
-        "scripts/transform_csv_dataset/merge_product_translations.py",  
+        "scripts/transform_csv_dataset/merge_product_translations.py",
+        "scripts/db/init_db.py",       
+        "scripts/db/load_data.py",     
         "scripts/analysis/analyze_data_quality.py",
         "test_pipeline.py",
     ]
