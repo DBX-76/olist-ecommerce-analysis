@@ -4,7 +4,10 @@
 
 ## 📊 Ce que fait le projet
 
-Analyse complète des données de l'e-commerce brésilien Olist :
+**Partie SQL Avancé**: Seule la section `analytics/` correspondant au projet final et les scripts CTE (`scripts/cte/`) ont été traités. (Conne dit,je pourrais allégrement appliquer les autres parties en entreprise)
+
+**Fonctionnalités du projet**:
+- Analyse complète des données de l'e-commerce brésilien Olist
 - Nettoyage et standardisation des données
 - Détection d'anomalies (géographiques, financières, produits)
 - Enrichissement géographique
