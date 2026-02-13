@@ -54,6 +54,7 @@ jobs:
           mkdir -p reports/zip_code_reference
           mkdir -p reports/customers
           mkdir -p reports/sellers
+          mkdir -p reports/cte
             
       - name: Run pipeline
         run: python run_pipeline.py

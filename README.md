@@ -42,6 +42,11 @@ Projet/
 │   └── utils/                  # Utility scripts
 │       ├── organize_reports.py
 │       └── test_profiling.py
+├── analytics/                  # Analytics and KPI scripts
+│   ├── kpi_queries.sql         # Optimized SQL queries for KPIs
+│   ├── generate_dashboards.py  # Script to generate static dashboards
+│   ├── performance_test.py     # Query performance measurement
+│   └── streamlit_dashboard.py  # Interactive Streamlit dashboard
 ├── reports/                    # Generated reports and visualizations
 │   ├── eda/                    # EDA reports (HTML)
 │   ├── data_quality/           # Data quality reports (CSV)
@@ -65,7 +70,7 @@ Projet/
 ### Prerequisites
 - Python 3.7+
 - Jupyter Notebook
-- Required libraries: pandas, numpy, matplotlib, seaborn, ydata-profiling
+- Required libraries: pandas, numpy, matplotlib, seaborn, ydata-profiling, plotly, streamlit
 - PostgreSQL database
 - psycopg2-binary (for PostgreSQL connection)
 
@@ -119,6 +124,23 @@ python scripts/db/load_data.py
 8. **View the generated reports**:
    - Open HTML files in [`reports/eda/`](reports/eda/) directory
    - Check anomaly detection reports in [`reports/anomaly_detection/`](reports/anomaly_detection/)
+
+9. **Run e-commerce analytics**:
+```bash
+python run_analytics.py
+```
+
+10. **Or run analytics components individually**:
+```bash
+# Generate performance report
+python analytics/performance_test.py
+
+# Generate static dashboards
+python analytics/generate_dashboards.py
+
+# Run interactive Streamlit dashboard
+streamlit run analytics/streamlit_dashboard.py
+```
 
 ---
 
@@ -247,6 +269,13 @@ The dataset contains 9 CSV files with information about 100k orders from 2016 to
 - **Customer Geolocation**: Adds geographic coordinates to customer records
 - **Seller Geolocation**: Adds geographic coordinates to seller records
 - **Spread Metrics**: Calculates geographic spread for quality assessment
+
+### 7. E-commerce Analytics
+- **Sales Analytics**: Revenue tracking (daily/monthly/yearly), growth analysis, top products
+- **Customer Analytics**: New vs returning customers, average cart value, conversion rates, RFM analysis
+- **Cohort Analysis**: Retention tracking, LTV by cohort, churn analysis
+- **Performance Optimization**: Query optimization with indexing strategy
+- **Interactive Dashboards**: Streamlit and Plotly-based visualizations
 
 ## 📊 Key Outputs
 
