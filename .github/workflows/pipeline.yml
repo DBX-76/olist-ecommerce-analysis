@@ -47,7 +47,14 @@ jobs:
 
       - name: Create processed data directory
         run: mkdir -p data/processed
-      
+
+      - name: Create report directories
+        run: |
+          mkdir -p reports/anomaly_detection
+          mkdir -p reports/zip_code_reference
+          mkdir -p reports/customers
+          mkdir -p reports/sellers
+            
       - name: Run pipeline
         run: python run_pipeline.py
 
